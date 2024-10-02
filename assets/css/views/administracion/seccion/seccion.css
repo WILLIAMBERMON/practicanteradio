@@ -1,0 +1,76 @@
+.imagen-contenedor {
+position: relative;
+display: inline-block;
+}
+.imagen-pequeña {
+width: auto;
+height: auto;
+cursor: pointer;
+}
+.modal2 {
+display: none;
+position: fixed;
+z-index: 1;
+margin: 50px;
+margin-left: 50%;
+left: 0;
+top: 0;
+width: 700px;
+height: 360px;
+overflow: auto;
+background-color: rgba(0,0,0,0.3);
+}
+.imagen-grande {
+position: absolute;
+max-width: 700px !important;
+max-height: 360px !important;
+}
+.imagen-contenedor:hover .modal2 {
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+/* Estilos para el modal de advertencia */
+.modal-warning .modal-content {
+border-color: #f0ad4e; /* Color del borde del modal */
+background-color: #fcf8e3; /* Color de fondo del modal */
+}
+
+.modal-warning .modal-header {
+background-color: #f0ad4e; /* Color de fondo del encabezado */
+color: #fff; /* Color del texto en el encabezado */
+}
+
+.modal-warning .modal-footer {
+background-color: #fcf8e3; /* Color de fondo del pie del modal */
+}
+
+.modal-warning .modal-title {
+color: #fff; /* Color del título del modal */
+}
+
+.btn-outline {
+    border: 1px solid #000; /* Borde gris oscuro */
+    color: #fff; /* Texto en blanco */
+    background-color: #8b9298; /* Fondo gris oscuro */
+}
+
+.btn-outline:hover {
+    color: #fff; /* Mantiene el texto en blanco */
+    background-color: #5a6268; /* Fondo ligeramente más oscuro en hover */
+    border-color: #545b62; /* Borde un poco más oscuro en hover */
+}
+.btn-warning {
+color: #fff;
+background-color: #f0ad4e;
+border-color: #eea236;
+}
+
+.btn-warning:hover {
+color: #fff;
+background-color: #ec971f;
+border-color: #d58512;
+}
+
+

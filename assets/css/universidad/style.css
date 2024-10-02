@@ -1,0 +1,42 @@
+a:focus 
+{
+    background-color: yellow !important;
+    color: black !important;
+}
+
+b:focus 
+{
+    background-color: yellow !important;
+    color: black !important;
+}
+
+
+.header-v6 .navbar-nav>li>a:focus {
+    background-color: yellow !important;
+    color: black !important;
+
+}
+
+h5:focus {
+    background-color: yellow !important;
+    color: black !important;
+
+}
+
+button:focus {
+    background-color: yellow !important;
+    color: black !important;
+
+}
+
+img:focus {
+    background-color: yellow !important;
+    color: black !important;
+
+}
+
+.i-spadies:focus {
+    background-color: yellow !important;
+    color: black !important;
+
+}
