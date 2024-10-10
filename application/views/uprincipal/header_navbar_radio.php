@@ -18,10 +18,122 @@
                     <div class="col-sm-7 col-xs-7">
                         <div class="topbar-toggler" style="font-size: 10px; color: #eee; letter-spacing: 1px; text-transform: uppercase;"><span class="fa fa-angle-down"></span> PERFILES</div>
 
-                        <!-- <iframe style="background:transparent" name="player" allow="autoplay" width="120px" height="52px" marginwidth=0 marginheight=0 hspace=0 vspace=0 frameborder=0 scrolling=no src="https://apps.ufps.edu.co/emisoraufps"></iframe> -->
-                        <video controls="" autoplay="" name="media" width="130px" height="52px">
-                            <source src="https://apps.ufps.edu.co/emisoraufps" type="application/ogg">
-                        </video>
+                        <!-- <iframe style="background:transparent" name="player" allow="autoplay" width="120px" height="52px" marginwidth=0 marginheight=0 hspace=0 vspace=0 frameborder=0 scrolling=no src="https://apps.ufps.edu.co/emisoraufps"></iframe> --> 
+                        
+                        <div class="audio-container">
+                            <audio id="radio-player" controls autoplay>
+                                <source src="https://apps.ufps.edu.co/emisoraufps" type="audio/mpeg">
+                            </audio>
+                            <img class="station-logo" src="https://ww2.ufps.edu.co/public/imagenes/template/header/pendon-emisora.png" alt="Radio Logo">
+                        </div>
+                            <style>
+                                
+                                /* Estilos base para el contenedor del reproductor */
+                                .audio-container {
+                                    position: relative;
+                                    display: flex;
+                                    align-items: center;
+                                    background-color: rgba(255, 255, 255, 0.8); /* Fondo translúcido */
+                                    padding: 1%;
+                                    border-radius: 20px;
+                                    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2); /* Sombra flotante */
+                                    transition: all 0.3s ease-in-out;
+                                    max-width: 310px;
+                                    margin: 0 auto; /* Centra el reproductor horizontalmente */
+                                }
+
+                                /* Imagen de logo pequeña a la izquierda del reproductor */
+                                .station-logo {
+                                    width: 40px;
+                                    height: 40px;
+                                    margin-right: 1%;
+                                    border-radius: 50%;
+                                    border: 2px solid #ff0000; /* Borde rojo */
+                                }
+
+                                /* Estilos para el audio, ocultando la barra de progreso */
+                                audio {
+                                    outline: none;
+                                    background: transparent;
+                                }
+
+                                audio::-webkit-media-controls-panel {
+                                    background-color: rgba(0, 0, 0, 0.5); /* Fondo del panel en negro translúcido */
+                                    color: white;
+                                }
+
+                                audio::-webkit-media-controls-timeline {
+                                    display: none; /* Oculta la barra de progreso */
+                                }
+
+                                audio::-webkit-media-controls-current-time-display,
+                                audio::-webkit-media-controls-time-remaining-display {
+                                    display: none; /* Oculta los tiempos */
+                                }
+
+                                audio::-webkit-media-controls-play-button {
+                                    color: #ff0000; /* Botón de play en rojo */
+                                }
+
+                                audio::-webkit-media-controls-mute-button {
+                                    color: #ffffff; /* Botón de mute en blanco */
+                                }
+
+                                /* Estilos para cuando se hace scroll: el reproductor se convierte en una burbuja */
+                                .audio-container.floating {
+                                    position: fixed;
+                                    bottom: 20px;
+                                    right: 20px;
+                                    background-color: rgba(0, 0, 0, 0.7); /* Fondo negro translúcido */
+                                    padding: 1%;
+                                    border-radius: 50px;
+                                    width: 310px;  /* Ancho flotante */
+                                    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.5); /* Efecto flotante */
+                                    z-index: 1000;
+                                    max-width: none; /* Quita el límite de 100% */
+                                    transform: scale(0.9); /* Hace más pequeño el reproductor al hacer scroll */
+                                }
+
+                                .audio-container.floating .station-logo {
+                                    width: 30px;
+                                    height: 30px;
+                                }
+
+                                /* Media query para que el reproductor sea 100% en pantallas pequeñas */
+                                @media (max-width: 768px) {
+                                    .audio-container {
+                                        width: 100%; /* 100% del ancho en pantallas pequeñas */
+                                        max-width: 100%;
+                                        padding: 5px;
+                                    }
+
+                                    .audio-container.floating {
+                                        width: 52%;  /* Asegúrate de que el reproductor no se esconda en la pantalla al estar flotante */
+                                        right: 5%;   /* Lo mantiene visible en la pantalla pequeña */
+                                        bottom: 10px;
+                                        transform: scale(0.8); /* Mantén el efecto de hacer más pequeño */
+                                    }
+                                }
+
+                                /* Animación para que se vea más flotante */
+                                .audio-container:hover {
+                                    transform: translateY(-5px);
+                                }
+
+                            </style>
+                            <script>
+                                window.onscroll = function () {
+                                const audioContainer = document.querySelector('.audio-container');
+                                if (window.scrollY > 100) {
+                                    audioContainer.classList.add('floating');
+                                } else {
+                                    audioContainer.classList.remove('floating');
+                                }
+                            };
+
+                            </script>
+                            
+
 
                     </div>
                     <div class="col-sm-5 col-xs-5 clearfix">

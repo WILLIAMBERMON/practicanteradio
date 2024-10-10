@@ -54,7 +54,7 @@
  * NOTE: If you change these, also change the error_reporting() code below
  */
 
-if ((in_array($_SERVER['REMOTE_ADDR'], array('::1', '127.0.0.1','10.0.2.2')) && ($_SERVER['SERVER_PORT'] == 10014 || $_SERVER['SERVER_PORT'] == 10024 || $_SERVER['SERVER_PORT'] == 10027)) &&  ($_SERVER['SERVER_NAME'] == 'localhost')) {
+if (in_array($_SERVER['REMOTE_ADDR'], array('::1', '127.0.0.1','10.0.2.2')) && ($_SERVER['SERVER_NAME'] == 'localhost')) {
     $_SERVER['CI_ENV'] = 'development';
 }
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
