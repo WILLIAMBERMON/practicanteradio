@@ -193,7 +193,7 @@
             ?>
                 <?php if ($i == 0) : ?>
                     <?php $colore = "yellow"; ?>
-                    <?php $numColor = "#f1c40f"; ?>
+                    <?php $numColor = "#ffffff"; ?>
                 <?php elseif ($i == 1) : ?>
                     <?php $colore = "blue"; ?>
                     <?php $numColor = "#3498db"; ?>

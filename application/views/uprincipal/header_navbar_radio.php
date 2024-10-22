@@ -108,10 +108,10 @@
                                     }
 
                                     .audio-container.floating {
-                                        width: 52%;  /* Asegúrate de que el reproductor no se esconda en la pantalla al estar flotante */
+                                        width: 55%;  /* Asegúrate de que el reproductor no se esconda en la pantalla al estar flotante */
                                         right: 5%;   /* Lo mantiene visible en la pantalla pequeña */
                                         bottom: 10px;
-                                        transform: scale(0.8); /* Mantén el efecto de hacer más pequeño */
+                                        transform: scale(0.9); /* Mantén el efecto de hacer más pequeño */
                                     }
                                 }
 
@@ -121,17 +121,7 @@
                                 }
 
                             </style>
-                            <script>
-                                window.onscroll = function () {
-                                const audioContainer = document.querySelector('.audio-container');
-                                if (window.scrollY > 100) {
-                                    audioContainer.classList.add('floating');
-                                } else {
-                                    audioContainer.classList.remove('floating');
-                                }
-                            };
-
-                            </script>
+                            
                             
 
 
@@ -200,7 +190,7 @@
     </div>
     <!--/end container-->
 
-    <div class="menu-responsive">
+    <div class="menu-responsive burguer">
         <!-- Logo -->
         <a class="logo logo-responsive" href="<?php echo base_url(); ?>">
             <img src="<?php echo base_url("public/imagenes/template/header/horizontal_logo_pequeno.png"); ?>" alt="Logo">
@@ -212,17 +202,88 @@
             <span class="sr-only">Toggle navigation</span>
             <span class="fa fa-bars"></span>
         </button>
+       
         <!-- End Toggle -->
     </div>
+    
+  <style>
+    .navbar-radio {
+      position: relative; /* Inicialmente es relativa */
+      width: auto; /* Navbar a 100% de ancho */
+      margin: 0 auto; /* Centramos el navbar */
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-radio.fixed {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000; /* Asegura que el navbar esté por encima de otros elementos */
+      width: 100%; /* Cambiamos el ancho al 80% */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
-    <!-- Navbar -->
-    <!-- Collect the nav links, forms, and other content for toggling -->
+    }
+    .burguer.fixed {
+    position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000; /* Asegura que el navbar esté por encima de otros elementos */
+      width: 70%;
+    }
+    .navbar-radio .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .navbar-radio.fixed .logo-navbar-radio {
+      display: block;
+    }
+    .logo-navbar-radio {
+      display: none;
+      height: 40px;
+      margin-right: 20px;
+    }
+  </style>
+
+  
+  <!-- Navbar -->
+  <div class="navbar-radio">
     <div class="collapse navbar-collapse mega-menu navbar-responsive-collapse">
-        <div class="container">
-            <?php echo $menuprincipal->desc_contenido; ?>
-        </div>
+      <div class="container">
+    <img src="https://ww2.ufps.edu.co/public/imagenes/template/header/pendon-emisora.png" alt="Logo" class="logo-navbar-radio">
+
+        <?php echo $menuprincipal->desc_contenido; ?>
+      </div>
     </div>
-    <!--/navbar-collapse-->
+  </div>
+
+  <script>
+    window.onscroll = function() {
+      var navbar = document.querySelector('.navbar-radio');
+      var burguer = document.querySelector('.burguer');
+
+      if (window.pageYOffset > 100) { // Puedes ajustar el valor
+        navbar.classList.add('fixed');
+        burguer.classList.add('fixed');
+
+      } else {
+        navbar.classList.remove('fixed');
+        burguer.classList.remove('fixed');
+
+      }
+      const audioContainer = document.querySelector('.audio-container');
+        if (window.scrollY > 100) {
+            audioContainer.classList.add('floating');
+        } else {
+            audioContainer.classList.remove('floating');
+        }
+    };
+  </script>
+
+
+
 
     <!-- End Navbar -->
 </div>
