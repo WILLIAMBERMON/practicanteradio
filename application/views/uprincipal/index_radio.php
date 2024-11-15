@@ -46,6 +46,122 @@
     </div>
 </div>
 <!-- FIN NOSOTROS -->
+
+<!-- CARRUSEL CON LOS COLECTIVOS RADIALES -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+<style>
+  /* Contenedor principal del carrusel */
+  .swiper-container {
+    width: 100%;
+    height: 450px;
+    background-image: url("https://s2.abcstatics.com/media/bienestar/2022/01/01/musica-clasica-beneficios-k7IG--1248x698@abc.jpg"); 
+    background-size: cover;
+    background-position: center;
+    overflow: hidden; /* Para evitar el scroll horizontal */
+  }
+
+  .swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+
+  /* Ajustes de las imágenes para que quepan según el tamaño de la pantalla */
+  .carousel-image {
+    width: 100%;
+    height: 300px;
+    max-width: 100%; /* Evitar que las imágenes sobrepasen su contenedor */
+    object-fit: cover; /* Para ajustar las imágenes sin deformarlas */
+    box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.5)
+  }
+
+  
+
+  /* Responsive: cuando la pantalla sea menor a 780px mostrar 2 imágenes */
+  @media (max-width: 900px) {
+    .swiper-container {
+      height: 300px;
+    }
+    .carousel-image {
+      height: 200px;
+    }
+   
+  }
+
+  /* Responsive: cuando la pantalla sea menor a 500px mostrar 1 sola imagen */
+  @media (max-width: 500px) {
+    .swiper-container {
+      height: 250px;
+    }
+    .carousel-image {
+      height: 150px;
+    }
+   
+  }
+  .section-title-colectivos {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+
+    }
+
+    .section-title-colectivos:after {
+      content: "";
+      display: block;
+      width: 130px;
+      height: 2.5px;
+      background-color: red;
+      margin-top: 10px;
+      margin: 10px auto 0 auto;
+    }
+</style>
+
+<h2 class="section-title-colectivos">Colectivos Radiales</h2>
+
+
+<!-- Contenedor del carrusel -->
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+    <!-- Slides con las imágenes -->
+    <div class="swiper-slide"><img src="https://radionacional-v3.s3.amazonaws.com/s3fs-public/styles/portadas_relaciona_4_3/public/senalradio/articulo-noticia/galeriaimagen/piano-1655558_1280.jpg?h=1c9b88c9&itok=PuVKDe1b" alt="Imagen 2" class="carousel-image"></div>
+    <div class="swiper-slide"><img src="https://ww2.ufps.edu.co/public/imagenes/seccion/a6f32d218e21789ac34c372e849b9921.jpg" alt="Imagen 1" class="carousel-image"></div>
+    <div class="swiper-slide"><img src="https://radionacional-v3.s3.amazonaws.com/s3fs-public/styles/portadas_relaciona_4_3/public/senalradio/articulo-noticia/galeriaimagen/piano-1655558_1280.jpg?h=1c9b88c9&itok=PuVKDe1b" alt="Imagen 3" class="carousel-image"></div>
+    <div class="swiper-slide"><img src="https://ww2.ufps.edu.co/public/imagenes/seccion/a6f32d218e21789ac34c372e849b9921.jpg" alt="Imagen 1" class="carousel-image"></div>
+    <div class="swiper-slide"><img src="https://radionacional-v3.s3.amazonaws.com/s3fs-public/styles/portadas_relaciona_4_3/public/senalradio/articulo-noticia/galeriaimagen/piano-1655558_1280.jpg?h=1c9b88c9&itok=PuVKDe1b" alt="Imagen 3" class="carousel-image"></div>
+    <div class="swiper-slide"><img src="https://ww2.ufps.edu.co/public/imagenes/seccion/a6f32d218e21789ac34c372e849b9921.jpg" alt="Imagen 1" class="carousel-image"></div>
+  </div>
+ 
+</div>
+
+<!-- Scripts de Swiper.js -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+  const swiper = new Swiper('.swiper-container', {
+    loop: true,  // Repetición infinita
+    slidesPerView: 1,  // Mostrar 3 imágenes al mismo tiempo en pantallas grandes
+    spaceBetween: 10,  // Espacio entre cada imagen
+    simulateTouch: true,
+    grabCursor: true,
+    speed: 600,  
+    autoplay: {
+   delay: 5000,
+ },
+    breakpoints: {
+      900: {
+        slidesPerView: 3, // 2 imágenes para pantallas menores a 780px
+      },
+      500: {
+        slidesPerView: 2, // 1 imagen para pantallas menores a 500px
+      }
+    }
+  });
+</script>
+<!-- FIN COLECTIVOS -->
+
+
+<!-- Carrusel con el equipo de la radio -->
 <style>
       .tarjeta {
         border: 1px solid #ccc;
@@ -114,7 +230,8 @@
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 10px;
-      padding-left: 10%;
+      text-align: center;
+
     }
 
     .section-title-equipo:after {
@@ -307,114 +424,4 @@
 
 
 
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 
-<style>
-  /* Contenedor principal del carrusel */
-  .swiper-container {
-    width: 100%;
-    height: 450px;
-    background-image: url("https://s2.abcstatics.com/media/bienestar/2022/01/01/musica-clasica-beneficios-k7IG--1248x698@abc.jpg"); 
-    background-size: cover;
-    background-position: center;
-    overflow: hidden; /* Para evitar el scroll horizontal */
-  }
-
-  .swiper-slide {
-  display: flex;
-  justify-content: center;
-  align-items: center; 
-}
-
-  /* Ajustes de las imágenes para que quepan según el tamaño de la pantalla */
-  .carousel-image {
-    width: 100%;
-    height: 300px;
-    max-width: 100%; /* Evitar que las imágenes sobrepasen su contenedor */
-    object-fit: cover; /* Para ajustar las imágenes sin deformarlas */
-    box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.5)
-  }
-
-  
-
-  /* Responsive: cuando la pantalla sea menor a 780px mostrar 2 imágenes */
-  @media (max-width: 900px) {
-    .swiper-container {
-      height: 300px;
-    }
-    .carousel-image {
-      height: 200px;
-    }
-   
-  }
-
-  /* Responsive: cuando la pantalla sea menor a 500px mostrar 1 sola imagen */
-  @media (max-width: 500px) {
-    .swiper-container {
-      height: 250px;
-    }
-    .carousel-image {
-      height: 150px;
-    }
-   
-  }
-  .section-title-colectivos {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      padding-left: 10%;
-      text-align: center;
-
-    }
-
-    .section-title-colectivos:after {
-      content: "";
-      display: block;
-      width: 130px;
-      height: 2.5px;
-      background-color: red;
-      margin-top: 10px;
-      margin: 10px auto 0 auto;
-    }
-</style>
-
-<h2 class="section-title-colectivos">Colectivos Radiales</h2>
-
-
-<!-- Contenedor del carrusel -->
-<div class="swiper-container">
-  <div class="swiper-wrapper">
-    <!-- Slides con las imágenes -->
-    <div class="swiper-slide"><img src="https://radionacional-v3.s3.amazonaws.com/s3fs-public/styles/portadas_relaciona_4_3/public/senalradio/articulo-noticia/galeriaimagen/piano-1655558_1280.jpg?h=1c9b88c9&itok=PuVKDe1b" alt="Imagen 2" class="carousel-image"></div>
-    <div class="swiper-slide"><img src="https://ww2.ufps.edu.co/public/imagenes/seccion/a6f32d218e21789ac34c372e849b9921.jpg" alt="Imagen 1" class="carousel-image"></div>
-    <div class="swiper-slide"><img src="https://radionacional-v3.s3.amazonaws.com/s3fs-public/styles/portadas_relaciona_4_3/public/senalradio/articulo-noticia/galeriaimagen/piano-1655558_1280.jpg?h=1c9b88c9&itok=PuVKDe1b" alt="Imagen 3" class="carousel-image"></div>
-    <div class="swiper-slide"><img src="https://ww2.ufps.edu.co/public/imagenes/seccion/a6f32d218e21789ac34c372e849b9921.jpg" alt="Imagen 1" class="carousel-image"></div>
-    <div class="swiper-slide"><img src="https://radionacional-v3.s3.amazonaws.com/s3fs-public/styles/portadas_relaciona_4_3/public/senalradio/articulo-noticia/galeriaimagen/piano-1655558_1280.jpg?h=1c9b88c9&itok=PuVKDe1b" alt="Imagen 3" class="carousel-image"></div>
-    <div class="swiper-slide"><img src="https://ww2.ufps.edu.co/public/imagenes/seccion/a6f32d218e21789ac34c372e849b9921.jpg" alt="Imagen 1" class="carousel-image"></div>
-  </div>
- 
-</div>
-
-<!-- Scripts de Swiper.js -->
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script>
-  const swiper = new Swiper('.swiper-container', {
-    loop: true,  // Repetición infinita
-    slidesPerView: 1,  // Mostrar 3 imágenes al mismo tiempo en pantallas grandes
-    spaceBetween: 10,  // Espacio entre cada imagen
-    simulateTouch: true,
-    grabCursor: true,
-    speed: 600,  
-    autoplay: {
-   delay: 5000,
- },
-    breakpoints: {
-      900: {
-        slidesPerView: 3, // 2 imágenes para pantallas menores a 780px
-      },
-      500: {
-        slidesPerView: 2, // 1 imagen para pantallas menores a 500px
-      }
-    }
-  });
-</script>

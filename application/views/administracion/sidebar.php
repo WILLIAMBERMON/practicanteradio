@@ -29,8 +29,18 @@
                     <?php endif; ?>
                     <?php if ($userdata->rol == 'admin' || $userdata->rol == 'radio'): ?>
                     <li class="<?= ($item_sidebar_active == 'administrar_secciones') ? 'active' : ''; ?>">
+                        <a href="<?= site_url('administracion/getColectivosRadiales'); ?>">
+                            Administrar Colectivos
+                        </a>
+                    </li>
+                    <li class="<?= ($item_sidebar_active == 'administrar_secciones') ? 'active' : ''; ?>">
+                        <a href="<?= site_url('administracion/get_programacion_radio'); ?>">
+                            Administrar Programacion
+                        </a>
+                    </li>
+                    <li class="<?= ($item_sidebar_active == 'administrar_secciones') ? 'active' : ''; ?>">
                         <a href="<?= site_url('administracion/seccion'); ?>">
-                            Administrar Secciones
+                            Administrar Secciones Nosotros/Contacto
                         </a>
                     </li>
                     <?php endif; ?>

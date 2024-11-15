@@ -175,7 +175,7 @@
                     </div>
                     <div class="col-md-5 col-sm-5 col-xs-5">
                         <a href="http://ww2.ufps.edu.co/uradio">
-                            <img id="logo-header" src="<?php echo base_url("public/imagenes/template/header/pendon-emisora.png"); ?>" alt="Logo Radio UFPS" width="200px" height="160px">
+                            <img id="logo-header" src="https://ww2.ufps.edu.co/public/imagenes/template/header/pendon-emisora.png" alt="Logo Radio UFPS" width="200px" height="160px">
                         </a>
                     </div>
                     <div class="col-md-2 col-ms-1 col-xs-2 pull-right">
