@@ -3295,12 +3295,265 @@ function eliminarArchivosEnCarpeta($carpeta, $nombresImagenes)
         foreach($colectivos as $colectivo){
             $colectivos_array[$colectivo->id]=$colectivo->titulo;
         }        
+        $dias=["Lunes"=>"Lunes",
+        "Martes"=>"Martes",
+        "Miercoles"=>"Miercoles",
+        "Jueves"=>"Jueves",
+        "Viernes"=>"Viernes",
+        "Sabado"=>"Sabado",
+        "Domingo"=>"Domingo"];
         $this->template->set('colectivos',$colectivos_array);
+        $this->template->set('dias',$dias);
 
         $this->template->set('item_sidebar_active', 'administrar_secciones');
 
         $this->template->render('administracion/admin_radio/programacion/crear_programacion');
     }
+//guarda en la base de datos la programacion
+    public function store_programacion_radio () {
+        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+            $this->_validar_login('radio');
+        else
+            $this->_validar_login('admin');
+
+            $this->load->model('ProgramacionRadio_model'); 
+
+            $this->load->library('form_validation');
+    
+            $this->form_validation->set_rules('colectivo', 'Colectivo:', 'required|integer');
+            $this->form_validation->set_rules('hora_inicio', 'Hora de Inicio:', 'required');
+            $this->form_validation->set_rules('hora_fin', 'Hora de Fin:', 'required');
+            $this->form_validation->set_rules('dia_transmicion', 'Dias:', 'required|max_length[50]');
+    
+            if ($this->form_validation->run() == FALSE) {
+
+                if($error_colectivo = form_error('colectivo'))
+                echo " " . $error_colectivo;
+                
+                if($error_hora_inicio = form_error('hora_inicio'))
+                echo " " . $error_hora_inicio;
+    
+                if($error_hora_fin = form_error('hora_fin'))
+                echo " " . $error_hora_fin;
+    
+    
+                if($error_dia_transmicion = form_error('dia_transmicion'))
+                echo " " . $error_dia_transmicion;
+            }
+            else {
+                $data = array(
+                    'colectivo_id' => $this->input->post('colectivo'),
+                    'hora_inicio' => $this->input->post('hora_inicio'),
+                    'hora_fin' => $this->input->post('hora_fin'),
+                    'dia' => $this->input->post('dia_transmicion'),
+    
+                );
+                
+                
+                    $this->ProgramacionRadio_model->insert_programacion($data);
+                    redirect('administracion/get_programacion_radio');
+                }
+        }
+        //funcion para eliminar una programacion 
+        public function delete_programacion_radio ($id) {
+            if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+                $this->_validar_login('radio');
+            else
+                $this->_validar_login('admin');
+    
+            $this->load->model('ProgramacionRadio_model'); 
+            $programacion = $this->ProgramacionRadio_model->get_programacion($id);
+        
+            if ($programacion) {        
+                // Eliminar el registro de la base de datos
+                $this->ProgramacionRadio_model->delete_programacion($id);
+                redirect('administracion/get_programacion_radio');
+         }
+        }
+
+
+    //vista para editar una programacion existente
+    public function editar_programacion_radio ($id) {
+        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+            $this->_validar_login('radio');
+        else
+            $this->_validar_login('admin');
+        $this->template->add_css('css/pages/pricing/pricing_v8');
+        $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+        $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+        $this->template->add_js("plugins/datatables/js/main");
+        $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+        $this->load->helper('form');
+
+        $this->load->model('Colectivosradiales_model'); 
+        $this->load->model('ProgramacionRadio_model'); 
+        $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
+        $programacion = $this->ProgramacionRadio_model->get_programacion($id);
+
+        $colectivos_array= [];
+        foreach($colectivos as $colectivo){
+            $colectivos_array[$colectivo->id]=$colectivo->titulo;
+        }        
+        $dias=["Lunes"=>"Lunes",
+        "Martes"=>"Martes",
+        "Miercoles"=>"Miercoles",
+        "Jueves"=>"Jueves",
+        "Viernes"=>"Viernes",
+        "Sabado"=>"Sabado",
+        "Domingo"=>"Domingo"];
+        $this->template->set('colectivos',$colectivos_array);
+        $this->template->set('programacion',$programacion);
+        $this->template->set('dias',$dias);
+
+        $this->template->set('item_sidebar_active', 'administrar_secciones');
+
+        $this->template->render('administracion/admin_radio/programacion/editar_programacion');
+    }
+    
+//Actualiza en la base de datos la programacion seleccionada
+public function update_programacion_radio ($id) {
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+
+        $this->load->model('ProgramacionRadio_model'); 
+
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules('colectivo', 'Colectivo:', 'required|integer');
+        $this->form_validation->set_rules('hora_inicio', 'Hora de Inicio:', 'required');
+        $this->form_validation->set_rules('hora_fin', 'Hora de Fin:', 'required');
+        $this->form_validation->set_rules('dia_transmicion', 'Dias:', 'required|max_length[50]');
+
+        if ($this->form_validation->run() == FALSE) {
+
+            if($error_colectivo = form_error('colectivo'))
+            echo " " . $error_colectivo;
+            
+            if($error_hora_inicio = form_error('hora_inicio'))
+            echo " " . $error_hora_inicio;
+
+            if($error_hora_fin = form_error('hora_fin'))
+            echo " " . $error_hora_fin;
+
+
+            if($error_dia_transmicion = form_error('dia_transmicion'))
+            echo " " . $error_dia_transmicion;
+        }
+        else {
+            $data = array(
+                'colectivo_id' => $this->input->post('colectivo'),
+                'hora_inicio' => $this->input->post('hora_inicio'),
+                'hora_fin' => $this->input->post('hora_fin'),
+                'dia' => $this->input->post('dia_transmicion'),
+
+            );
+            
+            
+                $this->ProgramacionRadio_model->update_programacion($id,$data);
+                redirect('administracion/get_programacion_radio');
+            }
+    }
+//este metodo es para gestionar la imagen principal del index de la radio UFPS
+    public function imagen_principal_radio ($crear,$editar) {
+
+        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+            $this->_validar_login('radio');
+        else
+            $this->_validar_login('admin');
+        $this->template->add_css('css/pages/pricing/pricing_v8');
+        $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+        $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+        $this->template->add_js("plugins/datatables/js/main");
+        $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+        $this->template->set('item_sidebar_active', 'administrar_secciones');
+        $this->load->helper('form');
+
+        $this->load->model('contenido_model'); 
+        $contenidos = $this->contenido_model->get_all_contenido(195);
+        $array_contenido=[];
+        $array_id=[];
+        foreach ($contenidos as $contenido) {
+            $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
+            $array_id[$contenido->nombre_contenido]=  $contenido->id_contenido ;
+        }
+        $config['upload_path']          = './' . 'public/imagenes/radio/imagen_principal/'; // Carpeta donde se guardarán las imágenes
+        $config['allowed_types']        = 'gif|jpg|png';
+        $config['max_size']             = 1024; // Tamaño máximo en KB
+        $config['max_width']            = 2000;
+        $config['max_height']           = 600;
+
+        if(isset($array_contenido["imagen_principal_index_radio"])){
+            $primero=false;
+            $this->template->set('primero',$primero);
+            $contenido = $this->contenido_model->get_contenido($array_id[$contenido->nombre_contenido]);
+            if($editar=="true"){
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0777);}
+                $this->load->library('upload');
+                $this->upload->initialize($config);
+    
+                    if(!$this->upload->do_upload('foto')){
+                        $error= array('error' => $this->upload->display_errors());
+                        echo $error['error'];
+                    }
+                    else{
+                        $data=[];
+                        $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
+
+                        if ($contenido) {
+                            $ruta_imagen = './public/imagenes/radio/imagen_principal/' . $contenido->desc_contenido;
+                
+                            if (file_exists($ruta_imagen)) {
+                                unlink($ruta_imagen);
+                            }
+                        }
+                        $this->contenido_model->update_contenido($array_id[$contenido->nombre_contenido],$data);
+    
+                        redirect('administracion/imagen_principal_radio/false/false');
+                    }             
+            }
+            else{
+                $this->template->set('contenido',$contenido);
+
+                $this->template->render('administracion/admin_radio/imagen_home/administrar_imagen_index');
+
+            }
+        }else{
+
+            $primero=true;
+            $this->template->set('primero',$primero);
+            if($crear=="true"){
+            echo "entro en el if: " . $crear . " y ". $editar;
+
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0777);}
+            $this->load->library('upload');
+            $this->upload->initialize($config);
+
+                if(!$this->upload->do_upload('foto')){
+                    $error= array('error' => $this->upload->display_errors());
+                    echo $error['error'];
+                }
+                else{
+                    $data=[
+                        "id_seccion"=>"195",
+                        "nombre_contenido"=>"imagen_principal_index_radio",
+                    ];
+                    $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
+                
+                    $this->contenido_model->insert($data);
+
+                    redirect('administracion/imagen_principal_radio/false/false');
+                }               
+            }
+            else{
+                $this->template->render('administracion/admin_radio/imagen_home/administrar_imagen_index');
+            }
+                }
+    }
+    
     public function documento_contenido_titulo()
     {
         

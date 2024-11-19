@@ -153,6 +153,8 @@
         <?php if (isset($slider_principal)) : ?>
             <?php include APPPATH . "views/uprincipal/sliderprincipalradio.php"; ?>
         <?php endif; ?>
+
+        
         <?php foreach ($_content as $_view) : ?>
             <?php include $_view; ?>
         <?php endforeach; ?>

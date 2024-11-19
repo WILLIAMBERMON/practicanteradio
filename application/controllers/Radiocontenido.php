@@ -241,78 +241,100 @@ class Radiocontenido extends CMS_Controller
 
     public function institucion($idnom = null, $idcont = null, $iddoc = null)
     {
+        if($idnom == "colectivos-radiales-ufps-radio"){
+            redirect("radiocontenido/colectivos_radiales");
+        }elseif ($idnom == "programacion-ufps-radio") {
 
-        $this->template->add_js('js/views/custom/elevatezoom.min');
-        $this->template->add_js('js/elevatezoom/jquery.elevatezoom.min');
-      //  $this->template->add_js('js/responsiveimagenmap/jquery.rwdImageMaps');
-      //  $this->template->add_js('js/jquery/jquery.min');
-
-
-
-     //   $this->template->add_js('js/elevatezoom/jquery-1.8.3.min');
-
-        $present = false;
-        $categoria = "radiocontenido";
-        if ($this->s_model->getUrlSeccion($idnom)) {
-            $id = $this->s_model->getUrlSeccion($idnom)[0]->id_seccion;
-            $seccion = $this->s_model->getSeccion($id);
-        } else {
-            show_404();
-        }
-
-        if (!$idcont) {
-            $present = true;
-        }
-
-        $menu = $this->m_model->getSeccionMenu($id);
-        $submenu = $this->m_model->getSeccionSubmenu($id);
-        $menuTabla = $this->menuTabla($menu, $submenu);
-
-        if ($idcont == 'doc' && $iddoc != null) {
-            $contenido = null;
-            $contenido = $this->getArchivoPdfRegla($iddoc);
-            $subcontenido = null;
-        } else {
-
-            if (empty(explode("-", $idcont)[1])) {
-                $contenido = $this->contenidoMet($id, $idcont, $menuTabla);
+        }else{
+            $this->template->add_js('js/views/custom/elevatezoom.min');
+            $this->template->add_js('js/elevatezoom/jquery.elevatezoom.min');
+          //  $this->template->add_js('js/responsiveimagenmap/jquery.rwdImageMaps');
+          //  $this->template->add_js('js/jquery/jquery.min');
+    
+    
+    
+         //   $this->template->add_js('js/elevatezoom/jquery-1.8.3.min');
+    
+            $present = false;
+            $categoria = "radiocontenido";
+            if ($this->s_model->getUrlSeccion($idnom)) {
+                $id = $this->s_model->getUrlSeccion($idnom)[0]->id_seccion;
+                $seccion = $this->s_model->getSeccion($id);
             } else {
-                $contenido[0] = $this->getContenido($id, explode("-", $idcont)[0]);
+                show_404();
             }
-
+    
+            if (!$idcont) {
+                $present = true;
+            }
+    
+            $menu = $this->m_model->getSeccionMenu($id);
+            $submenu = $this->m_model->getSeccionSubmenu($id);
+            $menuTabla = $this->menuTabla($menu, $submenu);
+    
+            if ($idcont == 'doc' && $iddoc != null) {
+                $contenido = null;
+                $contenido = $this->getArchivoPdfRegla($iddoc);
+                $subcontenido = null;
+            } else {
+    
+                if (empty(explode("-", $idcont)[1])) {
+                    $contenido = $this->contenidoMet($id, $idcont, $menuTabla);
+                } else {
+                    $contenido[0] = $this->getContenido($id, explode("-", $idcont)[0]);
+                }
+    
+            }
+            if(isset($contenido[0][0]->id_contenido)) {
+                $titulos = $this->dc_model->get_documentos_contenido_titulo($contenido[0][0]->id_contenido);
+    
+                $numFilas = count($titulos);
+                $array_temp = array();
+                for ($i = 0; $i < $numFilas; $i++) {
+                    $documento = $this->dc_model->get_documentos_contenido($titulos[$i]->id_titulo);
+                    $array_temp = array_merge($array_temp, $documento);
+                }
+                if (isset($array_temp)) {
+                    $this->template->set('titulos_doc', $titulos);
+                    $this->template->set('documentosc', $array_temp);
+                }
+            }
+    
+            $titulo_bread = $seccion[0]->nombre_seccion;
+            $breadcrumb = $this->_breadcrumbSeccion($seccion);
+            $subcontenido = $this->subContenidoMet($contenido);
+    
+            $this->template->set('subcontenido', $subcontenido);
+            $this->template->set('present', $present);
+            $this->template->set('idnom', $idnom);
+            $this->template->set('breadcrumb', $breadcrumb);
+            $this->template->set('titulo_bread', $titulo_bread);
+            $this->template->set('titulo', $seccion[0]->nombre_seccion);
+            $this->template->set('categoria', $categoria);
+            $this->template->set('menuTabla', $menuTabla);
+            $this->template->set('menu', $menu);
+            $this->template->set('submenu', $submenu);
+            $this->template->set('contenido', $contenido);
+            $this->template->set('seccion', $seccion);
+            $this->template->render('universidad/dependencia');
         }
-        if(isset($contenido[0][0]->id_contenido)) {
-            $titulos = $this->dc_model->get_documentos_contenido_titulo($contenido[0][0]->id_contenido);
 
-            $numFilas = count($titulos);
-            $array_temp = array();
-            for ($i = 0; $i < $numFilas; $i++) {
-                $documento = $this->dc_model->get_documentos_contenido($titulos[$i]->id_titulo);
-                $array_temp = array_merge($array_temp, $documento);
-            }
-            if (isset($array_temp)) {
-                $this->template->set('titulos_doc', $titulos);
-                $this->template->set('documentosc', $array_temp);
-            }
-        }
+        
+    }
+    public function colectivos_radiales (){
 
-        $titulo_bread = $seccion[0]->nombre_seccion;
-        $breadcrumb = $this->_breadcrumbSeccion($seccion);
-        $subcontenido = $this->subContenidoMet($contenido);
+        $this->load->model('Colectivosradiales_model');     
+        $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
 
-        $this->template->set('subcontenido', $subcontenido);
-        $this->template->set('present', $present);
-        $this->template->set('idnom', $idnom);
-        $this->template->set('breadcrumb', $breadcrumb);
-        $this->template->set('titulo_bread', $titulo_bread);
-        $this->template->set('titulo', $seccion[0]->nombre_seccion);
-        $this->template->set('categoria', $categoria);
-        $this->template->set('menuTabla', $menuTabla);
-        $this->template->set('menu', $menu);
-        $this->template->set('submenu', $submenu);
-        $this->template->set('contenido', $contenido);
-        $this->template->set('seccion', $seccion);
-        $this->template->render('universidad/dependencia');
+
+        $this->load->model('Colectivosradiales_model'); 
+        $categorias = $this->Colectivosradiales_model->obtener_categorias();
+        $this->template->set('categorias',$categorias);
+$this->template->set('colectivos', $colectivos );
+        $this->template->set('item_sidebar_active', 'administrar_secciones');
+
+        $this->template->render('radio_ufps/view_colectivos');
+
     }
 
 

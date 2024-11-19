@@ -39,6 +39,11 @@
                         </a>
                     </li>
                     <li class="<?= ($item_sidebar_active == 'administrar_secciones') ? 'active' : ''; ?>">
+                        <a href="<?= site_url('administracion/imagen_principal_radio/false/false'); ?>">
+                            Administrar imagen principal
+                        </a>
+                    </li>
+                    <li class="<?= ($item_sidebar_active == 'administrar_secciones') ? 'active' : ''; ?>">
                         <a href="<?= site_url('administracion/seccion'); ?>">
                             Administrar Secciones Nosotros/Contacto
                         </a>

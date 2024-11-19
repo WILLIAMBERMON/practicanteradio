@@ -2,7 +2,7 @@
     <?php include APPPATH . "views/administracion/sidebar.php"; ?>
 
     <div class="col-md-9">
-        <h1>Crear Nuevo Colectivo</h1>
+        <h1>Editar Colectivo</h1>
         <?php echo form_open_multipart(base_url('administracion/editar_colectivo_update/'.$data_colectivos->id)); ?>
             <div class="form-group <?php echo form_error('titulo') ? 'has-error' : ''; ?>">
                 <?php echo form_label('Título:', 'titulo'); ?>
