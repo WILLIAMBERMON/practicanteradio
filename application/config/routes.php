@@ -84,7 +84,7 @@ $route['organismo/(:any)/(:any)/(:any)'] = 'universidad/organismo/$1/$2/$3';
 $route['universidad/(:any)/(:any)'] = 'universidad/institucion/$1/$2';
 $route['universidad/(:any)/(:any)/(:any)'] = 'universidad/institucion/$1/$2/$3';
 $route['vicerrectoria/(:any)/(:any)'] = 'universidad/vicerrectoria/$1/$2';
-
+$route['radiocontenido/colectivo_radial/(:any)'] = 'radiocontenido/colectivo_radial/$1';
 $route['radiocontenido/(:any)/(:any)'] = 'radiocontenido/institucion/$1/$2';
 $route['ufpsradio'] = 'uradio';
 

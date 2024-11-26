@@ -15,17 +15,8 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-7 col-xs-7">
+                    <div class="col-sm-8 col-xs-10">
                         <div class="topbar-toggler" style="font-size: 10px; color: #eee; letter-spacing: 1px; text-transform: uppercase;"><span class="fa fa-angle-down"></span> PERFILES</div>
-
-                        <!-- <iframe style="background:transparent" name="player" allow="autoplay" width="120px" height="52px" marginwidth=0 marginheight=0 hspace=0 vspace=0 frameborder=0 scrolling=no src="https://apps.ufps.edu.co/emisoraufps"></iframe> --> 
-                        
-                        <div class="audio-container">
-                            <audio id="radio-player" controls autoplay>
-                                <source src="https://apps.ufps.edu.co/emisoraufps" type="audio/mpeg">
-                            </audio>
-                            <img class="station-logo" src="https://ww2.ufps.edu.co/public/imagenes/template/header/pendon-emisora.png" alt="Radio Logo">
-                        </div>
                             <style>
                                 
                                 /* Estilos base para el contenedor del reproductor */
@@ -38,47 +29,21 @@
                                     border-radius: 20px;
                                     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2); /* Sombra flotante */
                                     transition: all 0.3s ease-in-out;
-                                    max-width: 310px;
-                                    margin: 0 auto; /* Centra el reproductor horizontalmente */
+                                    max-width: 55%;
                                 }
 
                                 /* Imagen de logo pequeña a la izquierda del reproductor */
                                 .station-logo {
-                                    width: 40px;
-                                    height: 40px;
-                                    margin-right: 1%;
+                                    width: 45px;
+                                    height: 45px;
                                     border-radius: 50%;
                                     border: 2px solid #ff0000; /* Borde rojo */
                                 }
 
                                 /* Estilos para el audio, ocultando la barra de progreso */
                                 audio {
-                                    outline: none;
-                                    background: transparent;
+                                    display: none;
                                 }
-
-                                audio::-webkit-media-controls-panel {
-                                    background-color: rgba(0, 0, 0, 0.5); /* Fondo del panel en negro translúcido */
-                                    color: white;
-                                }
-
-                                audio::-webkit-media-controls-timeline {
-                                    display: none; /* Oculta la barra de progreso */
-                                }
-
-                                audio::-webkit-media-controls-current-time-display,
-                                audio::-webkit-media-controls-time-remaining-display {
-                                    display: none; /* Oculta los tiempos */
-                                }
-
-                                audio::-webkit-media-controls-play-button {
-                                    color: #ff0000; /* Botón de play en rojo */
-                                }
-
-                                audio::-webkit-media-controls-mute-button {
-                                    color: #ffffff; /* Botón de mute en blanco */
-                                }
-
                                 /* Estilos para cuando se hace scroll: el reproductor se convierte en una burbuja */
                                 .audio-container.floating {
                                     position: fixed;
@@ -87,17 +52,17 @@
                                     background-color: rgba(0, 0, 0, 0.7); /* Fondo negro translúcido */
                                     padding: 1%;
                                     border-radius: 50px;
-                                    width: 310px;  /* Ancho flotante */
+                                    width: 28%;  /* Ancho flotante */
                                     box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.5); /* Efecto flotante */
                                     z-index: 1000;
                                     max-width: none; /* Quita el límite de 100% */
-                                    transform: scale(0.9); /* Hace más pequeño el reproductor al hacer scroll */
+                                    color: #999;
+                                }
+                                .audio-container.floating p {
+                                    color: #999 !important;
                                 }
 
-                                .audio-container.floating .station-logo {
-                                    width: 30px;
-                                    height: 30px;
-                                }
+                                
 
                                 /* Media query para que el reproductor sea 100% en pantallas pequeñas */
                                 @media (max-width: 768px) {
@@ -108,25 +73,154 @@
                                     }
 
                                     .audio-container.floating {
-                                        width: 55%;  /* Asegúrate de que el reproductor no se esconda en la pantalla al estar flotante */
+                                        width: 80%;  /* Asegúrate de que el reproductor no se esconda en la pantalla al estar flotante */
                                         right: 5%;   /* Lo mantiene visible en la pantalla pequeña */
                                         bottom: 10px;
-                                        transform: scale(0.9); /* Mantén el efecto de hacer más pequeño */
                                     }
                                 }
 
                                 /* Animación para que se vea más flotante */
                                 .audio-container:hover {
-                                    transform: translateY(-5px);
+                                    transform: translateY(-3px);
                                 }
+                                .boton-reproductor {
+                                        background-color: red; /* Color de fondo rojo */
+                                        border-radius: 50%; /* Hace que el contenedor sea redondo */
+                                        width: 45px; /* Ancho del contenedor */
+                                        height: 45px; /* Alto del contenedor */
+                                        display: flex; /* Para centrar el contenido */
+                                        justify-content: center; /* Centra el contenido horizontalmente */
+                                        align-items: center; /* Centra el contenido verticalmente */
+                                        color: white; /* Color del texto */
+                                        font-size: 16px; /* Tamaño de fuente */
+                                        text-align: center; /* Alineación del texto */
+                                        border: 2px solid red; /* Borde rojo alrededor del botón */
+                                        position: relative; /* Necesario para el efecto de pseudo-elemento */
+                                        transition: background-color 0.3s, transform 0.3s; /* Efecto suave en el hover */
+                                        cursor: pointer; /* Cambia el cursor a puntero */
+                                    }
 
+                                    .boton-reproductor:hover {
+                                        background-color: darkred; /* Color de fondo más oscuro al hacer hover */
+                                        transform: scale(1.05); /* Efecto de aumento al hacer hover */
+                                    }
+                                    #volume {
+                                        -webkit-appearance: none; /* Para WebKit */
+                                        appearance: none; /* Para otros navegadores */
+                                        height: 5px; /* Altura del control deslizante */
+                                        background: #ccc; /* Color de fondo del control deslizante */
+                                        border-radius: 50px; /* Hace que el control deslizante sea redondeado */
+                                    }
+                                    #volume::-webkit-slider-thumb {
+                                        -webkit-appearance: none; /* Elimina el estilo por defecto */
+                                        appearance: none;
+                                        width: 15px; /* Ancho del pulgar */
+                                        height: 15px; /* Alto del pulgar */
+                                        border-radius: 50%; /* Hace que el pulgar sea redondo */
+                                        background: #fff; /* Color del pulgar */
+                                        cursor: pointer; /* Cambia el cursor al pasar el mouse */
+                                        transition: background 0.3s; /* Transición suave para el color */
+                                    }
+                                    #volume::-moz-range-thumb {
+                                        width: 15px; /* Ancho del pulgar */
+                                        height: 15px; /* Alto del pulgar */
+                                        border-radius: 50%; /* Hace que el pulgar sea redondo */
+                                        background: #fff; /* Color del pulgar */
+                                        cursor: pointer; /* Cambia el cursor al pasar el mouse */
+                                        transition: background 0.3s; /* Transición suave para el color */
+                                    }
+                                    #volume:hover::-webkit-slider-thumb {
+                                        background: red; /* Cambia a rojo al hacer hover */
+                                    }
+                                    #volume:hover::-moz-range-thumb {
+                                        background: red; /* Cambia a rojo al hacer hover */
+                                    }
+                                    .volume-control {
+                                        display: flex; /* Usar flexbox para alinear en fila */
+                                        align-items: center; /* Centrar verticalmente */
+                                        gap: 10px; /* Espacio entre el ícono y el control deslizante */
+                                    }
+     
                             </style>
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+                        <div class="audio-container">
+                            <div class="player">
+                                    <button id="play" class="boton-reproductor" style="display:none;">
+                                        <i class="fas fa-play"></i> 
+                                    </button>
+                                    <button id="pause" class="boton-reproductor">
+                                        <i class="fas fa-pause"></i> 
+                                    </button>
+                                    <audio id="audio" controls autoplay>
+                                        <source src="https://apps.ufps.edu.co/emisoraufps" type="audio/mpeg">
+                                    </audio>
+                            </div>
+                                
+                            <div class="contenedor-informacion" style="width:70%; text-align: center;">
+                            <p style="font-weight: bold; font-size: 1.3em; margin: 1px; color: #333;">
+                                <?php echo $colectivo_actual ? $colectivo_actual->titulo : "En Directo - UFPS"; ?>
+                            </p>
+                            <p style="font-size: 1.1em; margin: 1px; color: #666;"> 
+                                             <?php  if($programacion_actual):
+                                                    // Convertir hora_inicio a formato 12H
+                                                    $hora_inicio = date("g:i A", strtotime($programacion_actual->hora_inicio));
+                                                    // Convertir hora_fin a formato 12H
+                                                    $hora_fin = date("g:i A", strtotime($programacion_actual->hora_fin));
+                                                    
+                                                    echo $hora_inicio; ?> - <?php echo $hora_fin; 
+                                             endif; ?>
+                                </p>
+                                <div class="volume-control">
+                                    <i class="icono-volume5  fa-solid fa-volume-high " aria-hidden="true"></i>
+                                    <i class="icono-volume-  fas fa-volume-down hidden" aria-hidden="true"></i>
+                                    <i class="icono-volume0  fas fa-volume-off hidden" aria-hidden="true"></i>
+                                    <input type="range" id="volume" min="0" max="1" step="0.1" value="1" style="width:100%;">
+                                </div>
+                                
+                            </div>
                             
-                            
+                            <img class="station-logo" src="<?php echo $colectivo_actual ? base_url("public/imagenes/radio/colectivos/" . $colectivo_actual->foto)  : base_url("public/imagenes/template/header/pendon-emisora.png"); ?>" alt="Radio Logo">
+                        </div>
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+                        <script>
+                            $(document).ready(function() {
+                                    var audio = $('#audio')[0];
 
-                    </div>
-                    <div class="col-sm-5 col-xs-5 clearfix">
+                                    $('#play').click(function() {
+                                        audio.play();
+                                        $(this).hide();
+                                        $('#pause').show();
+                                    });
+
+                                    $('#pause').click(function() {
+                                        audio.pause();
+                                        $(this).hide();
+                                        $('#play').show();
+                                    });
+
+                                    $('#volume').on('input', function() {
+                                        audio.volume = $(this).val();
+                                        console.log("valor = "+ $(this).val() );
+                                        if ($(this).val() >= 0.5) {
+                                            $('.icono-volume-').addClass('hidden');
+                                            $('.icono-volume0').addClass('hidden');
+                                            $('.icono-volume5').removeClass('hidden');
+                                        }
+                                        else if ($(this).val()< 0.5 && $(this).val()> 0.0 ) {
+                                            $('.icono-volume5').addClass('hidden');
+                                            $('.icono-volume0').addClass('hidden');
+                                            $('.icono-volume-').removeClass('hidden');
+                                        }else{
+                                            $('.icono-volume5').addClass('hidden');
+                                            $('.icono-volume-').addClass('hidden');
+                                            $('.icono-volume0').removeClass('hidden');
+                                        }
+                                    });
+                                });
+                        </script>
+                     </div>      
+                    <div class="col-sm-4 col-xs-2 clearfix">
                         <i class="fa fa-search search-btn pull-right"></i>
                         <ul class="topbar-list topbar-log_reg pull-right visible-md-block visible-lg-block">
                             <li class="cd-log_reg home" style="padding: 0px 12px;">
@@ -175,7 +269,7 @@
                     </div>
                     <div class="col-md-5 col-sm-5 col-xs-5">
                         <a href="http://ww2.ufps.edu.co/uradio">
-                            <img id="logo-header" src="https://ww2.ufps.edu.co/public/imagenes/template/header/pendon-emisora.png" alt="Logo Radio UFPS" width="200px" height="160px">
+                            <img id="logo-header" src="<?php echo base_url("public/imagenes/template/header/pendon-emisora.png"); ?>" alt="Logo Radio UFPS" width="200px" height="160px">
                         </a>
                     </div>
                     <div class="col-md-2 col-ms-1 col-xs-2 pull-right">

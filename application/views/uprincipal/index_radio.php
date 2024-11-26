@@ -1,51 +1,4 @@
-<!-- NOSOTROS -->
-<div style="background-color: #b43432;">
-    <div class="container content-prin profile">
 
-        <div class="row margin-bottom-10 margin-top-10">
-            <div class="headline-center-v2 margin-bottom-10">
-            <div id="pie1" class="footer-v1 off-container">
-        </div>
-                <h1 style="font-size: 30px; color:#ffffff;"><b>Nosotros</b></h1>
-                <span class="bordered-icon"><i class="fa fa-thumb-tack" aria-hidden="true"></i></span>
-            </div>
- 
-                <div class="col-sm-4">
-                    <div class="headline-center-v2 margin-bottom-10">
-                        <h5 style="font-size: 25px; color:#ffffff;"><b><br>Quiénes somos</b></h5>
-                        <div class="service-block-v2" style="background: #fff; border-top: 5px solid #f1c40f;">
-                            <p>
-                                <b>La UFPS Radio 95.2 FM es la emisora de la Universidad Francisco de Paula Santander en Cúcuta. Durante nuestra existencia nos hemos caracterizado por ser un medio de comunicación alternativo e incluyente.
-</b></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="headline-center-v2 margin-bottom-10">
-                        <h5 style="font-size: 25px; color:#ffffff;"><b><br>Qué hablamos</b></h5>
-                        <div class="service-block-v2" style="background: #fff; border-top: 5px solid #3498db;">
-                        <p>
-                                <b>Nuestra academia, los hechos de actualidad, nuestra ciudad, las ciencias, las artes, la literatura, la música, la cultura y el sentir de nuestras comunidades, son los contenidos que se emiten desde la UFPS Radio 95.2FM
-                                </b></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="headline-center-v2 margin-bottom-10">
-                        <h5 style="font-size: 25px; color:#ffffff;"><b><br>Cómo lo hablamos</b></h5>
-                        <div class="service-block-v2" style="background: #fff; border-top: 5px solid #e74c3c;">
-                        <p>
-                                <b>En la UFPS Radio 95.2 FM abordamos estos y muchos más temas a través de Programas radiales, Microprogramas, Seriados, Capsulas informativas, Especiales y Documentales sonoros de producción propia o fruto de convenios
-                                interinstitucionales, nacionales e internacionales.
-                                </b></p>
-                        </div>
-                    </div>
-                </div>
-        </div><!--/row-->
-
-    </div>
-</div>
-<!-- FIN NOSOTROS -->
 
 <!-- CARRUSEL CON LOS COLECTIVOS RADIALES -->
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
@@ -125,12 +78,14 @@
 <div class="swiper-container">
   <div class="swiper-wrapper">
     <!-- Slides con las imágenes -->
-    <div class="swiper-slide"><img src="https://radionacional-v3.s3.amazonaws.com/s3fs-public/styles/portadas_relaciona_4_3/public/senalradio/articulo-noticia/galeriaimagen/piano-1655558_1280.jpg?h=1c9b88c9&itok=PuVKDe1b" alt="Imagen 2" class="carousel-image"></div>
-    <div class="swiper-slide"><img src="https://ww2.ufps.edu.co/public/imagenes/seccion/a6f32d218e21789ac34c372e849b9921.jpg" alt="Imagen 1" class="carousel-image"></div>
-    <div class="swiper-slide"><img src="https://radionacional-v3.s3.amazonaws.com/s3fs-public/styles/portadas_relaciona_4_3/public/senalradio/articulo-noticia/galeriaimagen/piano-1655558_1280.jpg?h=1c9b88c9&itok=PuVKDe1b" alt="Imagen 3" class="carousel-image"></div>
-    <div class="swiper-slide"><img src="https://ww2.ufps.edu.co/public/imagenes/seccion/a6f32d218e21789ac34c372e849b9921.jpg" alt="Imagen 1" class="carousel-image"></div>
-    <div class="swiper-slide"><img src="https://radionacional-v3.s3.amazonaws.com/s3fs-public/styles/portadas_relaciona_4_3/public/senalradio/articulo-noticia/galeriaimagen/piano-1655558_1280.jpg?h=1c9b88c9&itok=PuVKDe1b" alt="Imagen 3" class="carousel-image"></div>
-    <div class="swiper-slide"><img src="https://ww2.ufps.edu.co/public/imagenes/seccion/a6f32d218e21789ac34c372e849b9921.jpg" alt="Imagen 1" class="carousel-image"></div>
+    <?php foreach ($colectivos as $colectivo) :?>
+    <div class="swiper-slide">
+      <a href="<?php echo base_url("radiocontenido/colectivo_radial/" . $colectivo->id); ?>">
+        <img src="<?php echo base_url("public/imagenes/radio/colectivos/" . $colectivo->foto); ?>" alt="Imagen 1" class="carousel-image">
+      </a>
+    </div>
+    <?php endforeach; ?>  
+
   </div>
  
 </div>
@@ -352,55 +307,50 @@
       <div class="headline-center-v2 headline-center-v2-dark margin-bottom-10">
                 <h1 style="font-size: 30px;"><b>Redes Sociales</b></h1>
                 <span class="bordered-icon"><i class="fa fa-weixin" aria-hidden="true"></i></span>
-            </div>
+      </div>
 
-            <div align="center" class="margin-bottom-20">
-          <a href="https://www.facebook.com/UFPS-RADIO-23274124820/?fref=ts"target="_blank">
-            <img src="<?php echo base_url("public/imagenes/radio/social/1480311546_fb.png"); ?>" width="40px" height="40px" alt="Logo" />
-          </a>&nbsp;&nbsp;
-          <a href="https://twitter.com/ufpsradio"
-          target="_blank"><img src="<?php echo base_url("public/imagenes/radio/social/1480311550_twitter.png"); ?>" width="40px" height="40px" alt="Logo" />
-          </a>&nbsp;&nbsp;
-          <a href="https://soundcloud.com/ufpsradio"target="_blank">
-            <img src="<?php echo base_url("public/imagenes/radio/social/orange_white_40-94fc761.png"); ?>" width="40px" height="40px" alt="Logo" />
-          </a>
-        </div>
+           
 
       <div class="col-md-12">
         <div class="row equal-height-columns margin-bottom-10">
 
 					 <!-- Facebook-->
-           <div class="col-md-6">
+           <div class="col-xs-12 col-sm-12 col-md-6">
              <div class="fb-page" data-href="https://www.facebook.com/UFPS-RADIO-23274124820/?ref=page_internal"
-             data-tabs="timeline" data-height="500" data-width="500" data-small-header="false"
+             data-tabs="timeline" data-height="620" data-width="480" data-small-header="false"
              data-adapt-container-width="false" data-hide-cover="false" data-show-facepile="true">
              <blockquote cite="https://www.facebook.com/UFPS-RADIO-23274124820/?ref=page_internal" class="fb-xfbml-parse-ignore">
                <a href="https://www.facebook.com/UFPS-RADIO-23274124820/?ref=page_internal">UFPS RADIO</a>
              </blockquote>
            </div>
-           </div>
-
-          <!--Twitter-->
-          <div class="col-md-6">
-            <a class="twitter-timeline " data-lang="es" data-width="500"
-            data-height="500" data-dnt="true" href="https://twitter.com/ufpsradio">Tweets by ufpsradio</a>
-            <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-            <a class="twitter-follow-button"href="https://twitter.com/ufpsradio">Sigue @ufpsradio</a>
           </div>
 
-          <div class="col-md-12">
-            <div class="fb-comments" data-href="https://www.facebook.com/UFPS-RADIO-23274124820"data-mobile data-numposts="10">
-            </div>
-            <div id="incluirPagina" name="incluirPagina">
-            </div>
-          </div>
+         <!-- Instagram -->
+        <div class="col-xs-12 col-sm-12 col-md-6 ">
+          <h3 style="display: inline; margin-right: 10px;">Síguenos en Instagram</h3>
+              <a href="https://www.instagram.com/ufpsradio/" target="_blank" style="display: inline;">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" style="width: 20px; height: 20px; vertical-align: middle;">
+              </a>
+              <p>Visita nuestro perfil para ver las últimas publicaciones.</p>
+
+              
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/ufpsradio/" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
+            
+              
+              <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div>
+                <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div>
+                <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div>
+                <div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div>
+                <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a></div></blockquote> <script async src="//www.instagram.com/embed.js"></script>
+      </div>
+
+          
 
 
   </div>
 </div>
 </div>
 </div><!-- End Redes Sociales ---------------------->
-</div>
 
 
 <!-- ICONOS REDES SOCIALES -->
@@ -409,12 +359,10 @@
         <li class="tooltips" data-toggle="tooltip" data-placement="bottom" data-original-title="Síguenos en Facebook"><a
                 href="https://www.facebook.com/UFPS-C%C3%BAcuta-553833261409690" class="rounded social_facebook"></a>
         </li>
-        <li class="tooltips" data-toggle="tooltip" data-placement="bottom" data-original-title="Síguenos en Twitter"><a
-                href="https://twitter.com/UFPSCUCUTA" class="rounded social_twitter"></a></li>
         <li class="tooltips" data-toggle="tooltip" data-placement="bottom" data-original-title="Síguenos en Youtube"><a
                 href="https://www.youtube.com/channel/UCgPz-qqaAk4lbHfr0XH3k2g" class="rounded social_youtube"></a></li>
         <li class="tooltips" data-toggle="tooltip" data-placement="bottom" data-original-title="Síguenos en Instagram">
-            <a href="https://www.instagram.com/ufpscucuta/" class="rounded social_instagram"></a></li>
+            <a href="https://www.instagram.com/ufpsradio/" class="rounded social_instagram"></a></li>
         <li class="tooltips" data-toggle="tooltip" data-placement="bottom" data-original-title="Escuchanos en Vivo"><a
                 href="http://www.ufps.edu.co/emisora/player.php" class="rounded social_emisora"></a></li>
     </ul>

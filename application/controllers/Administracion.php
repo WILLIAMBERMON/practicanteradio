@@ -2911,135 +2911,264 @@ function eliminarArchivosEnCarpeta($carpeta, $nombresImagenes)
 
 
 
-    //muestra los colectivos creados para su administracion CRUD
-    public function getColectivosRadiales()
-    {
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
+//muestra los colectivos creados para su administracion CRUD
+public function getColectivosRadiales()
+{
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
 
-        $this->template->add_css('css/pages/pricing/pricing_v8');
+    $this->template->add_css('css/pages/pricing/pricing_v8');
 
-        $this->load->model('Colectivosradiales_model');     
+    $this->load->model('Colectivosradiales_model');     
 
-        $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
+    $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
 
-        $this->load->model('Colectivosradiales_model'); 
-        $categorias = $this->Colectivosradiales_model->obtener_categorias();
-        $this->template->set('categorias',$categorias);
+    $this->load->model('Colectivosradiales_model'); 
+    $categorias = $this->Colectivosradiales_model->obtener_categorias();
+    $this->template->set('categorias',$categorias);
 
-        $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
-        $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
-        $this->template->add_js("plugins/datatables/js/main");
-        $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+    $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+    $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+    $this->template->add_js("plugins/datatables/js/main");
+    $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
 
-        $this->template->set('colectivos', $colectivos );
-        $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->set('colectivos', $colectivos );
+    $this->template->set('item_sidebar_active', 'administrar_secciones');
 
-        $this->template->render('administracion/admin_radio/colectivos/index_colectivos');
+    $this->template->render('administracion/admin_radio/colectivos/index_colectivos');
+}
+//administrar categorias de colectivos
+public function categorias_colectivo ($crear=false) {
+
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+    $this->template->add_css('css/pages/pricing/pricing_v8');
+    $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+    $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+    $this->template->add_js("plugins/datatables/js/main");
+    $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->load->helper('form');
+
+    $this->load->model('Colectivosradiales_model'); 
+    $categorias = $this->Colectivosradiales_model->obtener_categorias();
+    $this->template->set('categorias',$categorias);
+    if($crear){
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nombre', 'Nombre de la Categoria:', 'required|max_length[255]');
+        if ($this->form_validation->run() == FALSE) {
+            $this->template->render('administracion/admin_radio/colectivos/categorias_colectivo');
+            
+        }
+        else{
+            $data=array("nombre"=>$this->input->post('nombre'));
+            $this->Colectivosradiales_model->insert_categoria($data);
+            redirect("administracion/categorias_colectivo/");
+        }
+        
+    }else
+    $this->template->render('administracion/admin_radio/colectivos/categorias_colectivo');
+
+
+}
+//editar categoria Colectivo
+public function editarCategoriaColectivo ($id) {
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+
+
+    $this->load->model('Colectivosradiales_model'); 
+        $this->form_validation->set_rules('editar', 'Editar la Categoria:', 'required|max_length[255]');
+        if ($this->form_validation->run() == FALSE) {
+            redirect("administracion/categorias_colectivo/");
+        }
+        else{
+            $data=array("nombre"=>$this->input->post('editar'));
+            $this->Colectivosradiales_model->update_categoria($id,$data);
+            redirect("administracion/categorias_colectivo/");
+        }
+    
+
+
+}
+
+//eliminar categoria Colectivo
+public function eliminarCategoriaColectivo ($id) {
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+
+
+    $this->load->model('Colectivosradiales_model'); 
+    $this->Colectivosradiales_model->delete_categoria($id);
+    redirect("administracion/categorias_colectivo/");
+
+}
+
+// Mostrar formulario para crear un nuevo colectivo
+public function crear_colectivo () {
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+    $this->template->add_css('css/pages/pricing/pricing_v8');
+    $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+    $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+    $this->template->add_js("plugins/datatables/js/main");
+    $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+    $this->load->helper('form');
+    $this->load->model('Colectivosradiales_model'); 
+    $categorias = $this->Colectivosradiales_model->obtener_categorias();
+    $this->template->set('categorias',$categorias);
+
+
+    $this->template->set('item_sidebar_active', 'administrar_secciones');
+
+    $this->template->render('administracion/admin_radio/colectivos/crear_colectivo');
+}
+
+// Guardar un nuevo colectivo
+public function store_colectivo () {
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+
+    $this->load->model('Colectivosradiales_model'); 
+
+    $this->load->library('form_validation');
+
+    $this->form_validation->set_rules('titulo', 'Título', 'required|max_length[255]');
+    $this->form_validation->set_rules('descripcion', 'Descripción', 'required');
+    $this->form_validation->set_rules('director', 'Presentado por:', 'max_length[255]');
+
+    if ($this->form_validation->run() == FALSE) {
+
+        if($error_titulo = form_error('titulo'))
+        echo "El título tiene el siguiente error: " . $error_titulo;
+
+        if($error_descripcion = form_error('descripcion'))
+        echo "La descripción tiene el siguiente error: " . $error_descripcion;
+
+
+        if($error_director = form_error('director'))
+        echo "El director tiene el siguiente error: " . $error_director;
     }
-    //administrar categorias de colectivos
-    public function categorias_colectivo ($crear=false) {
+    else {
+        $data = array(
+            'titulo' => $this->input->post('titulo'),
+            'descripcion' => $this->input->post('descripcion'),
+            'director' => $this->input->post('director'),
+            'categoria_id' => $this->input->post('categoria_id'),
 
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
-        $this->template->add_css('css/pages/pricing/pricing_v8');
-        $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
-        $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
-        $this->template->add_js("plugins/datatables/js/main");
-        $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
-        $this->template->set('item_sidebar_active', 'administrar_secciones');
-        $this->load->helper('form');
+        );
+        
+        $config['upload_path']          = './' . 'public/imagenes/radio/colectivos/'; // Carpeta donde se guardarán las imágenes
+        $config['allowed_types']        = 'gif|jpg|png';
+        $config['max_size']             = 1024; // Tamaño máximo en KB
+        $config['max_width']            = 800;
+        $config['max_height']           = 500;
+        if (!is_dir($config['upload_path'])) {
+            mkdir($config['upload_path'], 0777);
+        }
+        $this->load->library('upload');
+        $this->upload->initialize($config);
 
-        $this->load->model('Colectivosradiales_model'); 
-        $categorias = $this->Colectivosradiales_model->obtener_categorias();
-        $this->template->set('categorias',$categorias);
-        if($crear){
-            $this->load->library('form_validation');
-            $this->form_validation->set_rules('nombre', 'Nombre de la Categoria:', 'required|max_length[255]');
-            if ($this->form_validation->run() == FALSE) {
-                $this->template->render('administracion/admin_radio/colectivos/categorias_colectivo');
-                
-            }
-            else{
-                $data=array("nombre"=>$this->input->post('nombre'));
-                $this->Colectivosradiales_model->insert_categoria($data);
-                redirect("administracion/categorias_colectivo/");
+    
+        if (!$this->upload->do_upload('foto')) {
+
+            // La subida ha fallado
+            $error = array('error' => $this->upload->display_errors());
+            // Mostrar el mensaje de error
+            $dataupload = $this->upload->data();
+
+            foreach ($dataupload as $clave => $valor) {
+                echo "$clave: $valor<br>";
             }
             
-        }else
-        $this->template->render('administracion/admin_radio/colectivos/categorias_colectivo');
+            echo $error['error'];
+        } else {
 
-
+            $data['foto'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
+            
+            $this->Colectivosradiales_model->insert_colectivo($data);
+            redirect('administracion/getColectivosRadiales');
+        }
     }
-    //editar categoria Colectivo
-    public function editarCategoriaColectivo ($id) {
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
+}
+public function delete_colectivo ($id) {
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+
+    $this->load->model('Colectivosradiales_model'); 
+    $colectivo = $this->Colectivosradiales_model->get_colectivo($id);
+
+    if ($colectivo) {
+
+        // Eliminar la imagen si existe
+        $ruta_imagen = './public/imagenes/radio/colectivos/' . $colectivo->foto;
+        echo 'la ruta ' . $ruta_imagen ;
 
 
+        if (file_exists($ruta_imagen)) {
+            echo 'entramos la ruta ' . $ruta_imagen;
+            unlink($ruta_imagen);
+        }
+
+    // Eliminar el registro de la base de datos
+        $this->Colectivosradiales_model->delete_colectivo($id);
+        redirect('administracion/getColectivosRadiales');
+    }
+}
+public function editar_colectivo_vista ($id){
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+    $this->load->model('Colectivosradiales_model'); 
+    $colectivo = $this->Colectivosradiales_model->get_colectivo($id);
+
+    if ($colectivo) {
         $this->load->model('Colectivosradiales_model'); 
-            $this->form_validation->set_rules('editar', 'Editar la Categoria:', 'required|max_length[255]');
-            if ($this->form_validation->run() == FALSE) {
-                redirect("administracion/categorias_colectivo/");
-            }
-            else{
-                $data=array("nombre"=>$this->input->post('editar'));
-                $this->Colectivosradiales_model->update_categoria($id,$data);
-                redirect("administracion/categorias_colectivo/");
-            }
+    $categorias = $this->Colectivosradiales_model->obtener_categorias();
+    $this->template->set('categorias',$categorias);
         
-
-
-    }
-
-    //eliminar categoria Colectivo
-    public function eliminarCategoriaColectivo ($id) {
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
-
-
-        $this->load->model('Colectivosradiales_model'); 
-        $this->Colectivosradiales_model->delete_categoria($id);
-        redirect("administracion/categorias_colectivo/");
-
-    }
-
-    // Mostrar formulario para crear un nuevo colectivo
-    public function crear_colectivo () {
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
         $this->template->add_css('css/pages/pricing/pricing_v8');
         $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
         $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
         $this->template->add_js("plugins/datatables/js/main");
         $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
         $this->load->helper('form');
-        $this->load->model('Colectivosradiales_model'); 
-        $categorias = $this->Colectivosradiales_model->obtener_categorias();
-        $this->template->set('categorias',$categorias);
+
+        $this->template->set('data_colectivos', $colectivo );
 
 
         $this->template->set('item_sidebar_active', 'administrar_secciones');
 
-        $this->template->render('administracion/admin_radio/colectivos/crear_colectivo');
+        $this->template->render('administracion/admin_radio/colectivos/editar_colectivo');
     }
+    else{
+        redirect('administracion/getColectivosRadiales');
+    }
+    
+}
 
-    // Guardar un nuevo colectivo
-    public function store_colectivo () {
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
+public function editar_colectivo_update ($id) {
+
+
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
 
         $this->load->model('Colectivosradiales_model'); 
 
@@ -3050,31 +3179,26 @@ function eliminarArchivosEnCarpeta($carpeta, $nombresImagenes)
         $this->form_validation->set_rules('director', 'Director', 'max_length[255]');
 
         if ($this->form_validation->run() == FALSE) {
-    
             if($error_titulo = form_error('titulo'))
             echo "El título tiene el siguiente error: " . $error_titulo;
-
             if($error_descripcion = form_error('descripcion'))
             echo "La descripción tiene el siguiente error: " . $error_descripcion;
-
-
             if($error_director = form_error('director'))
             echo "El director tiene el siguiente error: " . $error_director;
         }
         else {
-            $data = array(
-                'titulo' => $this->input->post('titulo'),
-                'descripcion' => $this->input->post('descripcion'),
-                'director' => $this->input->post('director'),
-                'categoria_id' => $this->input->post('categoria_id'),
-
-            );
-            
-            $config['upload_path']          = './' . 'public/imagenes/radio/colectivos/'; // Carpeta donde se guardarán las imágenes
-            $config['allowed_types']        = 'gif|jpg|png';
-            $config['max_size']             = 1024; // Tamaño máximo en KB
-            $config['max_width']            = 1280;
-            $config['max_height']           = 800;
+                $data = array(
+                    'titulo' => $this->input->post('titulo'),
+                    'descripcion' => $this->input->post('descripcion'),
+                    'director' => $this->input->post('director'),
+                    'categoria_id'=> $this->input->post('categoria_id'),
+                );
+                
+                $config['upload_path']          = './' . 'public/imagenes/radio/colectivos/'; // Carpeta donde se guardarán las imágenes
+                $config['allowed_types']        = 'gif|jpg|png';
+                $config['max_size']             = 1024; // Tamaño máximo en KB
+                $config['max_width']            = 800;
+                $config['max_height']           = 500;
             if (!is_dir($config['upload_path'])) {
                 mkdir($config['upload_path'], 0777);
             }
@@ -3082,235 +3206,111 @@ function eliminarArchivosEnCarpeta($carpeta, $nombresImagenes)
             $this->upload->initialize($config);
 
         
-            if (!$this->upload->do_upload('foto')) {
-
-                // La subida ha fallado
-                $error = array('error' => $this->upload->display_errors());
-                // Mostrar el mensaje de error
-                $dataupload = $this->upload->data();
-
-                foreach ($dataupload as $clave => $valor) {
-                    echo "$clave: $valor<br>";
-                }
+            if ($_FILES["foto"]['size'] == 0) {
                 
-                echo $error['error'];
-            } else {
-
-                $data['foto'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
-                
-                $this->Colectivosradiales_model->insert_colectivo($data);
+                $this->Colectivosradiales_model->update_colectivo($id , $data);
                 redirect('administracion/getColectivosRadiales');
-            }
-        }
-    }
-    public function delete_colectivo ($id) {
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
-
-        $this->load->model('Colectivosradiales_model'); 
-        $colectivo = $this->Colectivosradiales_model->get_colectivo($id);
-    
-        if ($colectivo) {
-    
-            // Eliminar la imagen si existe
-            $ruta_imagen = './public/imagenes/radio/colectivos/' . $colectivo->foto;
-            echo 'la ruta ' . $ruta_imagen ;
-
-
-            if (file_exists($ruta_imagen)) {
-                echo 'entramos la ruta ' . $ruta_imagen;
-                unlink($ruta_imagen);
-            }
-    
-        // Eliminar el registro de la base de datos
-         $this->Colectivosradiales_model->delete_colectivo($id);
-         redirect('administracion/getColectivosRadiales');
-     }
-    }
-    public function editar_colectivo_vista ($id){
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
-        $this->load->model('Colectivosradiales_model'); 
-        $colectivo = $this->Colectivosradiales_model->get_colectivo($id);
-    
-        if ($colectivo) {
-            $this->load->model('Colectivosradiales_model'); 
-        $categorias = $this->Colectivosradiales_model->obtener_categorias();
-        $this->template->set('categorias',$categorias);
             
-            $this->template->add_css('css/pages/pricing/pricing_v8');
-            $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
-            $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
-            $this->template->add_js("plugins/datatables/js/main");
-            $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
-            $this->load->helper('form');
-    
-            $this->template->set('data_colectivos', $colectivo );
+            } else {
+                if(!$this->upload->do_upload('foto')){
+                    $error= array('error' => $this->upload->display_errors());
+                    echo $error['error'];
 
-
-            $this->template->set('item_sidebar_active', 'administrar_secciones');
-    
-            $this->template->render('administracion/admin_radio/colectivos/editar_colectivo');
-        }
-        else{
-            redirect('administracion/getColectivosRadiales');
-        }
-        
-    }
-
-    public function editar_colectivo_update ($id) {
-
-
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
-
-            $this->load->model('Colectivosradiales_model'); 
-
-            $this->load->library('form_validation');
-
-            $this->form_validation->set_rules('titulo', 'Título', 'required|max_length[255]');
-            $this->form_validation->set_rules('descripcion', 'Descripción', 'required');
-            $this->form_validation->set_rules('director', 'Director', 'max_length[255]');
-
-            if ($this->form_validation->run() == FALSE) {
-                if($error_titulo = form_error('titulo'))
-                echo "El título tiene el siguiente error: " . $error_titulo;
-                if($error_descripcion = form_error('descripcion'))
-                echo "La descripción tiene el siguiente error: " . $error_descripcion;
-                if($error_director = form_error('director'))
-                echo "El director tiene el siguiente error: " . $error_director;
-            }
-            else {
-                    $data = array(
-                        'titulo' => $this->input->post('titulo'),
-                        'descripcion' => $this->input->post('descripcion'),
-                        'director' => $this->input->post('director'),
-                        'categoria_id'=> $this->input->post('categoria_id'),
-                    );
-                    
-                    $config['upload_path']          = './' . 'public/imagenes/radio/colectivos/'; // Carpeta donde se guardarán las imágenes
-                    $config['allowed_types']        = 'gif|jpg|png';
-                    $config['max_size']             = 1024; // Tamaño máximo en KB
-                    $config['max_width']            = 1280;
-                    $config['max_height']           = 800;
-                if (!is_dir($config['upload_path'])) {
-                    mkdir($config['upload_path'], 0777);
                 }
-                $this->load->library('upload');
-                $this->upload->initialize($config);
+                else{
+                    $data['foto'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
+                
+                    $colectivo = $this->Colectivosradiales_model->get_colectivo($id);
 
+                    if ($colectivo) {
+                        $ruta_imagen = './public/imagenes/radio/colectivos/' . $colectivo->foto;
             
-                if ($_FILES["foto"]['size'] == 0) {
-                    
+                        if (file_exists($ruta_imagen)) {
+                            unlink($ruta_imagen);
+                        }
+                    }
+
                     $this->Colectivosradiales_model->update_colectivo($id , $data);
                     redirect('administracion/getColectivosRadiales');
-                
-                } else {
-                    if(!$this->upload->do_upload('foto')){
-                        $error= array('error' => $this->upload->display_errors());
-                        echo $error['error'];
-
-                    }
-                    else{
-                        $data['foto'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
-                    
-                        $colectivo = $this->Colectivosradiales_model->get_colectivo($id);
-
-                        if ($colectivo) {
-                            $ruta_imagen = './public/imagenes/radio/colectivos/' . $colectivo->foto;
-                
-                            if (file_exists($ruta_imagen)) {
-                                unlink($ruta_imagen);
-                            }
-                        }
-
-                        $this->Colectivosradiales_model->update_colectivo($id , $data);
-                        redirect('administracion/getColectivosRadiales');
-                    }
-
-                    
                 }
+
+                
             }
-    }
+        }
+}
 
 
 
 //obtenemos la programacion
-    public function get_programacion_radio()
-    {
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
+public function get_programacion_radio()
+{
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
 
-        $this->template->add_css('css/pages/pricing/pricing_v8');
+    $this->template->add_css('css/pages/pricing/pricing_v8');
 
-        $this->load->model('Colectivosradiales_model');     
-        $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
+    $this->load->model('Colectivosradiales_model');     
+    $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
 
-        $colectivos_array= [];
-        foreach($colectivos as $colectivo){
-            $colectivos_array[$colectivo->id]=[$colectivo->titulo,$colectivo->foto];
-        }
-
-        $this->load->model('ProgramacionRadio_model');     
-        $programacion = $this->ProgramacionRadio_model->get_all_programacion();
-        
-
-        $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
-        $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
-        $this->template->add_js("plugins/datatables/js/main");
-        $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
-
-        $this->template->set('colectivos', $colectivos_array );
-        $this->template->set('programacion', $programacion );
-        $this->template->set('item_sidebar_active', 'administrar_secciones');
-
-        $this->template->render('administracion/admin_radio/programacion/index_programacion');
+    $colectivos_array= [];
+    foreach($colectivos as $colectivo){
+        $colectivos_array[$colectivo->id]=[$colectivo->titulo,$colectivo->foto];
     }
 
-    // Mostrar formulario para crear un nuevo item de programacion
-    public function crear_programacion_radio () {
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
-        $this->template->add_css('css/pages/pricing/pricing_v8');
-        $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
-        $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
-        $this->template->add_js("plugins/datatables/js/main");
-        $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
-        $this->load->helper('form');
+    $this->load->model('ProgramacionRadio_model');     
+    $programacion = $this->ProgramacionRadio_model->get_all_programacion();
+    
 
-        $this->load->model('Colectivosradiales_model'); 
-        $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
+    $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+    $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+    $this->template->add_js("plugins/datatables/js/main");
+    $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
 
-        $colectivos_array= [];
-        foreach($colectivos as $colectivo){
-            $colectivos_array[$colectivo->id]=$colectivo->titulo;
-        }        
-        $dias=["Lunes"=>"Lunes",
-        "Martes"=>"Martes",
-        "Miercoles"=>"Miercoles",
-        "Jueves"=>"Jueves",
-        "Viernes"=>"Viernes",
-        "Sabado"=>"Sabado",
-        "Domingo"=>"Domingo"];
-        $this->template->set('colectivos',$colectivos_array);
-        $this->template->set('dias',$dias);
+    $this->template->set('colectivos', $colectivos_array );
+    $this->template->set('programacion', $programacion );
+    $this->template->set('item_sidebar_active', 'administrar_secciones');
 
-        $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->render('administracion/admin_radio/programacion/index_programacion');
+}
 
-        $this->template->render('administracion/admin_radio/programacion/crear_programacion');
-    }
+// Mostrar formulario para crear un nuevo item de programacion
+public function crear_programacion_radio () {
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+    $this->template->add_css('css/pages/pricing/pricing_v8');
+    $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+    $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+    $this->template->add_js("plugins/datatables/js/main");
+    $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+    $this->load->helper('form');
+
+    $this->load->model('Colectivosradiales_model'); 
+    $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
+
+    $colectivos_array= [];
+    foreach($colectivos as $colectivo){
+        $colectivos_array[$colectivo->id]=$colectivo->titulo;
+    }        
+    $dias=["Lunes"=>"Lunes",
+    "Martes"=>"Martes",
+    "Miercoles"=>"Miercoles",
+    "Jueves"=>"Jueves",
+    "Viernes"=>"Viernes",
+    "Sabado"=>"Sabado",
+    "Domingo"=>"Domingo"];
+    $this->template->set('colectivos',$colectivos_array);
+    $this->template->set('dias',$dias);
+
+    $this->template->set('item_sidebar_active', 'administrar_secciones');
+
+    $this->template->render('administracion/admin_radio/programacion/crear_programacion');
+}
 //guarda en la base de datos la programacion
-    public function store_programacion_radio () {
+public function store_programacion_radio () {
         if($this->session->userdata(SESSION_NAME)->rol == 'radio')
             $this->_validar_login('radio');
         else
@@ -3353,62 +3353,62 @@ function eliminarArchivosEnCarpeta($carpeta, $nombresImagenes)
                     $this->ProgramacionRadio_model->insert_programacion($data);
                     redirect('administracion/get_programacion_radio');
                 }
-        }
-        //funcion para eliminar una programacion 
-        public function delete_programacion_radio ($id) {
-            if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-                $this->_validar_login('radio');
-            else
-                $this->_validar_login('admin');
-    
-            $this->load->model('ProgramacionRadio_model'); 
-            $programacion = $this->ProgramacionRadio_model->get_programacion($id);
-        
-            if ($programacion) {        
-                // Eliminar el registro de la base de datos
-                $this->ProgramacionRadio_model->delete_programacion($id);
-                redirect('administracion/get_programacion_radio');
-         }
-        }
+}
+//funcion para eliminar una programacion 
+public function delete_programacion_radio ($id) {
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
 
+    $this->load->model('ProgramacionRadio_model'); 
+    $programacion = $this->ProgramacionRadio_model->get_programacion($id);
 
-    //vista para editar una programacion existente
-    public function editar_programacion_radio ($id) {
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
-        $this->template->add_css('css/pages/pricing/pricing_v8');
-        $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
-        $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
-        $this->template->add_js("plugins/datatables/js/main");
-        $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
-        $this->load->helper('form');
-
-        $this->load->model('Colectivosradiales_model'); 
-        $this->load->model('ProgramacionRadio_model'); 
-        $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
-        $programacion = $this->ProgramacionRadio_model->get_programacion($id);
-
-        $colectivos_array= [];
-        foreach($colectivos as $colectivo){
-            $colectivos_array[$colectivo->id]=$colectivo->titulo;
-        }        
-        $dias=["Lunes"=>"Lunes",
-        "Martes"=>"Martes",
-        "Miercoles"=>"Miercoles",
-        "Jueves"=>"Jueves",
-        "Viernes"=>"Viernes",
-        "Sabado"=>"Sabado",
-        "Domingo"=>"Domingo"];
-        $this->template->set('colectivos',$colectivos_array);
-        $this->template->set('programacion',$programacion);
-        $this->template->set('dias',$dias);
-
-        $this->template->set('item_sidebar_active', 'administrar_secciones');
-
-        $this->template->render('administracion/admin_radio/programacion/editar_programacion');
+    if ($programacion) {        
+        // Eliminar el registro de la base de datos
+        $this->ProgramacionRadio_model->delete_programacion($id);
+        redirect('administracion/get_programacion_radio');
     }
+}
+
+
+//vista para editar una programacion existente
+public function editar_programacion_radio ($id) {
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+    $this->template->add_css('css/pages/pricing/pricing_v8');
+    $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+    $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+    $this->template->add_js("plugins/datatables/js/main");
+    $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+    $this->load->helper('form');
+
+    $this->load->model('Colectivosradiales_model'); 
+    $this->load->model('ProgramacionRadio_model'); 
+    $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
+    $programacion = $this->ProgramacionRadio_model->get_programacion($id);
+
+    $colectivos_array= [];
+    foreach($colectivos as $colectivo){
+        $colectivos_array[$colectivo->id]=$colectivo->titulo;
+    }        
+    $dias=["Lunes"=>"Lunes",
+    "Martes"=>"Martes",
+    "Miercoles"=>"Miercoles",
+    "Jueves"=>"Jueves",
+    "Viernes"=>"Viernes",
+    "Sabado"=>"Sabado",
+    "Domingo"=>"Domingo"];
+    $this->template->set('colectivos',$colectivos_array);
+    $this->template->set('programacion',$programacion);
+    $this->template->set('dias',$dias);
+
+    $this->template->set('item_sidebar_active', 'administrar_secciones');
+
+    $this->template->render('administracion/admin_radio/programacion/editar_programacion');
+}
     
 //Actualiza en la base de datos la programacion seleccionada
 public function update_programacion_radio ($id) {
@@ -3454,79 +3454,41 @@ public function update_programacion_radio ($id) {
                 $this->ProgramacionRadio_model->update_programacion($id,$data);
                 redirect('administracion/get_programacion_radio');
             }
-    }
+}
 //este metodo es para gestionar la imagen principal del index de la radio UFPS
-    public function imagen_principal_radio ($crear,$editar) {
+public function imagen_principal_radio ($crear,$editar) {
 
-        if($this->session->userdata(SESSION_NAME)->rol == 'radio')
-            $this->_validar_login('radio');
-        else
-            $this->_validar_login('admin');
-        $this->template->add_css('css/pages/pricing/pricing_v8');
-        $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
-        $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
-        $this->template->add_js("plugins/datatables/js/main");
-        $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
-        $this->template->set('item_sidebar_active', 'administrar_secciones');
-        $this->load->helper('form');
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+    $this->template->add_css('css/pages/pricing/pricing_v8');
+    $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+    $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+    $this->template->add_js("plugins/datatables/js/main");
+    $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->load->helper('form');
 
-        $this->load->model('contenido_model'); 
-        $contenidos = $this->contenido_model->get_all_contenido(195);
-        $array_contenido=[];
-        $array_id=[];
-        foreach ($contenidos as $contenido) {
-            $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
-            $array_id[$contenido->nombre_contenido]=  $contenido->id_contenido ;
-        }
-        $config['upload_path']          = './' . 'public/imagenes/radio/imagen_principal/'; // Carpeta donde se guardarán las imágenes
-        $config['allowed_types']        = 'gif|jpg|png';
-        $config['max_size']             = 1024; // Tamaño máximo en KB
-        $config['max_width']            = 2000;
-        $config['max_height']           = 600;
+    $this->load->model('contenido_model'); 
+    $contenidos = $this->contenido_model->get_all_contenido(195);
+    $array_contenido=[];
+    $array_id=[];
+    foreach ($contenidos as $contenido) {
+        $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
+        $array_id[$contenido->nombre_contenido]=  $contenido->id_contenido ;
+    }
+    $config['upload_path']          = './' . 'public/imagenes/radio/imagen_principal/'; // Carpeta donde se guardarán las imágenes
+    $config['allowed_types']        = 'gif|jpg|png';
+    $config['max_size']             = 1024; // Tamaño máximo en KB
+    $config['max_width']            = 1900;
+    $config['max_height']           = 550;
 
-        if(isset($array_contenido["imagen_principal_index_radio"])){
-            $primero=false;
-            $this->template->set('primero',$primero);
-            $contenido = $this->contenido_model->get_contenido($array_id[$contenido->nombre_contenido]);
-            if($editar=="true"){
-                if (!is_dir($config['upload_path'])) {
-                    mkdir($config['upload_path'], 0777);}
-                $this->load->library('upload');
-                $this->upload->initialize($config);
-    
-                    if(!$this->upload->do_upload('foto')){
-                        $error= array('error' => $this->upload->display_errors());
-                        echo $error['error'];
-                    }
-                    else{
-                        $data=[];
-                        $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
-
-                        if ($contenido) {
-                            $ruta_imagen = './public/imagenes/radio/imagen_principal/' . $contenido->desc_contenido;
-                
-                            if (file_exists($ruta_imagen)) {
-                                unlink($ruta_imagen);
-                            }
-                        }
-                        $this->contenido_model->update_contenido($array_id[$contenido->nombre_contenido],$data);
-    
-                        redirect('administracion/imagen_principal_radio/false/false');
-                    }             
-            }
-            else{
-                $this->template->set('contenido',$contenido);
-
-                $this->template->render('administracion/admin_radio/imagen_home/administrar_imagen_index');
-
-            }
-        }else{
-
-            $primero=true;
-            $this->template->set('primero',$primero);
-            if($crear=="true"){
-            echo "entro en el if: " . $crear . " y ". $editar;
-
+    if(isset($array_contenido["imagen_principal_index_radio"])){
+        $primero=false;
+        $this->template->set('primero',$primero);
+        $contenido = $this->contenido_model->get_contenido($array_id[$contenido->nombre_contenido]);
+        if($editar=="true"){
             if (!is_dir($config['upload_path'])) {
                 mkdir($config['upload_path'], 0777);}
             $this->load->library('upload');
@@ -3537,22 +3499,60 @@ public function update_programacion_radio ($id) {
                     echo $error['error'];
                 }
                 else{
-                    $data=[
-                        "id_seccion"=>"195",
-                        "nombre_contenido"=>"imagen_principal_index_radio",
-                    ];
+                    $data=[];
                     $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
-                
-                    $this->contenido_model->insert($data);
+
+                    if ($contenido) {
+                        $ruta_imagen = './public/imagenes/radio/imagen_principal/' . $contenido->desc_contenido;
+            
+                        if (file_exists($ruta_imagen)) {
+                            unlink($ruta_imagen);
+                        }
+                    }
+                    $this->contenido_model->update_contenido($array_id[$contenido->nombre_contenido],$data);
 
                     redirect('administracion/imagen_principal_radio/false/false');
-                }               
+                }             
+        }
+        else{
+            $this->template->set('contenido',$contenido);
+
+            $this->template->render('administracion/admin_radio/imagen_home/administrar_imagen_index');
+
+        }
+    }else{
+
+        $primero=true;
+        $this->template->set('primero',$primero);
+        if($crear=="true"){
+
+        if (!is_dir($config['upload_path'])) {
+            mkdir($config['upload_path'], 0777);}
+        $this->load->library('upload');
+        $this->upload->initialize($config);
+
+            if(!$this->upload->do_upload('foto')){
+                $error= array('error' => $this->upload->display_errors());
+                echo $error['error'];
             }
             else{
-                $this->template->render('administracion/admin_radio/imagen_home/administrar_imagen_index');
+                $data=[
+                    "id_seccion"=>"195",
+                    "nombre_contenido"=>"imagen_principal_index_radio",
+                ];
+                $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
+            
+                $this->contenido_model->insert($data);
+
+                redirect('administracion/imagen_principal_radio/false/false');
+            }               
+        }
+        else{
+            $this->template->render('administracion/admin_radio/imagen_home/administrar_imagen_index');
+        }
             }
-                }
-    }
+}
+
     
     public function documento_contenido_titulo()
     {

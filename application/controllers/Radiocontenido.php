@@ -111,6 +111,61 @@ class Radiocontenido extends CMS_Controller
         //        echo '<pre>'; print_r($menuprincipal); return;
         $this->template->set('menuprincipal', $menuprincipal);
         
+         //enviar colectivo que esta sonando en la hora actual para poder mostrarlo en el reproductor
+         $this->load->model('Colectivosradiales_model');     
+         $this->load->model('ProgramacionRadio_model');     
+     
+         $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
+         $dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+         $programacion = [];
+         
+         foreach ($dias as $dia) {
+             $programacion[$dia] = $this->ProgramacionRadio_model->get_programacion_dia($dia);
+         }
+     
+         $colectivos_array = [];
+         foreach ($colectivos as $colectivo) {
+             $colectivos_array[$colectivo->id] = $this->Colectivosradiales_model->get_colectivo($colectivo->id);
+         }
+     
+         // Obtener la hora actual
+         date_default_timezone_set('America/Bogota');
+         $hora_actual = date('H:i');
+         $dia_actual = date('l'); // Obtiene el día actual en inglés
+         $dia_actual = ucfirst($dia_actual); // Capitaliza la primera letra
+         $dias = array(
+             "Sunday" => "Domingo",
+             "Monday" => "Lunes",
+             "Tuesday" => "Martes",
+             "Wednesday" => "Miércoles",
+             "Thursday" => "Jueves",
+             "Friday" => "Viernes",
+             "Saturday" => "Sábado"
+         );
+         $dia_actual= isset($dias[$dia_actual])? $dias[$dia_actual] : "null"  ;
+     
+         // Buscar el colectivo que está sonando
+         $colectivo_actual = null;
+         $programacion_actual = null;
+         if (isset($programacion[$dia_actual])) {
+             foreach ($programacion[$dia_actual] as $programa) {
+                 if ($hora_actual >= $programa->hora_inicio && $hora_actual <= $programa->hora_fin) {
+                     $colectivo_actual = $programa->colectivo_id;
+                     $programacion_actual = $programa;
+                     break;
+                 }
+             }
+         }
+     
+         // Obtener los detalles del colectivo actual
+         $colectivo_info = null;
+         if ($colectivo_actual && $programacion_actual) {
+             $colectivo_info = $colectivos_array[$colectivo_actual];
+         }
+     
+         // Pasar la información a la vista
+         $this->template->set('programacion_actual', $programacion_actual);
+         $this->template->set('colectivo_actual', $colectivo_info);
     }
 
     public function index($idnom = null, $idcont = null, $iddoc = null)
@@ -244,8 +299,8 @@ class Radiocontenido extends CMS_Controller
         if($idnom == "colectivos-radiales-ufps-radio"){
             redirect("radiocontenido/colectivos_radiales");
         }elseif ($idnom == "programacion-ufps-radio") {
-
-        }else{
+            redirect("radiocontenido/programacion_radio");
+        } else{
             $this->template->add_js('js/views/custom/elevatezoom.min');
             $this->template->add_js('js/elevatezoom/jquery.elevatezoom.min');
           //  $this->template->add_js('js/responsiveimagenmap/jquery.rwdImageMaps');
@@ -324,18 +379,60 @@ class Radiocontenido extends CMS_Controller
     public function colectivos_radiales (){
 
         $this->load->model('Colectivosradiales_model');     
-        $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
 
-
-        $this->load->model('Colectivosradiales_model'); 
         $categorias = $this->Colectivosradiales_model->obtener_categorias();
-        $this->template->set('categorias',$categorias);
-$this->template->set('colectivos', $colectivos );
-        $this->template->set('item_sidebar_active', 'administrar_secciones');
+        $colectivos = [];
+        foreach($categorias as $key => $value){
+            $colectivos[$key]=$this->Colectivosradiales_model->get_colectivo_categoria($key);
+        }
 
+        $this->template->set('categorias',$categorias);
+        $this->template->set('colectivos', $colectivos );
         $this->template->render('radio_ufps/view_colectivos');
 
     }
+
+    
+    public function programacion_radio (){
+        $this->load->model('Colectivosradiales_model');     
+        $this->load->model('ProgramacionRadio_model');     
+
+        $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
+        $dias=["Lunes","Martes","Miercoles","Jueves","Viernes","Sabado","Domingo"];
+        $programacion=[];
+        foreach ($dias as $dia) {
+            $programacion[$dia]=$this->ProgramacionRadio_model->get_programacion_dia($dia);
+        }
+        $colectivos_array=[];
+        foreach ($colectivos as $colectivo) {
+            $colectivos_array[$colectivo->id]=$this->Colectivosradiales_model->get_colectivo($colectivo->id);
+        }        
+
+        
+        $this->template->set('colectivos', $colectivos_array );
+        $this->template->set('programacion', $programacion );
+        $this->template->set('dias', $dias );
+
+        $this->template->render('radio_ufps/view_programacion');
+
+    }
+    public function colectivo_radial ($id){
+        $this->load->model('Colectivosradiales_model');     
+        $this->load->model('ProgramacionRadio_model');     
+
+        $categorias = $this->Colectivosradiales_model->obtener_categorias();
+        $colectivo = $this->Colectivosradiales_model->get_colectivo($id);
+        $programacion=$this->ProgramacionRadio_model->get_programacion_colectivo($id);
+
+        
+        $this->template->set('categorias',$categorias);
+        $this->template->set('colectivo', $colectivo );
+        $this->template->set('programacion', $programacion );
+
+        $this->template->render('radio_ufps/view_colectivo');
+
+    }
+
 
 
     public function vicerrectoria($idnom = null, $idcont = null, $iddoc = null)

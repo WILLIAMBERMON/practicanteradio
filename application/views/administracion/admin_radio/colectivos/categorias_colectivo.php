@@ -39,7 +39,6 @@
 
                 <a href="<?php echo site_url('administracion/eliminarCategoriaColectivo/'.$key); ?>" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Eliminar</a>
                 <?php echo form_open_multipart(base_url('administracion/editarCategoriaColectivo/'.$key)); ?>
-
                     <div class="form-group hidden" id="<?php echo $key; ?>">
                         <?php echo form_label('Editar la Categoria:', 'editar'); ?>
                         <?php echo form_input('editar', set_value('editar')); ?>

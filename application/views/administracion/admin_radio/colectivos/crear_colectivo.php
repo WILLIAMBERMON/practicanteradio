@@ -18,7 +18,7 @@
                 <?php echo form_upload('foto'); ?>
             </div>
             <div class="form-group">
-                <?php echo form_label('Director:', 'director'); ?>
+                <?php echo form_label('Presentado por:', 'director'); ?>
                 <?php echo form_input('director', set_value('director')); ?>
             </div>
             <label for="categoria_id">Categoría:</label>

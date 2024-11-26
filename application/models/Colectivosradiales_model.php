@@ -14,8 +14,6 @@ public function get_all_colectivos() {
 public function obtener_categorias() {
     // Obtenemos las categorías de la base de datos
     $query = $this->db->get('categoria_colectivo');
-
-    // Preparamos el array de opciones para el dropdown
     $categorias = array();
     foreach ($query->result() as $row) {
         $categorias[$row->id] = $row->nombre;  // 'id' es la clave, 'nombre' es el valor
@@ -47,6 +45,19 @@ public function delete_categoria ($id) {
 public function get_colectivo($id) {
     $query = $this->db->get_where('colectivo_radio', array('id' => $id));
     return $query->row();
+}
+//Obtener un colectivo por categoria
+public function get_colectivo_categoria($categoria_id) {
+        $this->db->select('*'); // Selecciona todas las columnas
+        $this->db->from('colectivo_radio'); // Tabla de la que se hará la consulta
+        $this->db->where('categoria_id', $categoria_id); // Filtro por categoria_id
+        $query = $this->db->get(); // Ejecuta la consulta
+
+        if ($query->num_rows() > 0) {
+            return $query->result(); // Devuelve los resultados como un array de objetos
+        } else {
+            return []; // Devuelve un array vacío si no hay resultados
+        }
 }
 
 // Insertar un nuevo colectivo

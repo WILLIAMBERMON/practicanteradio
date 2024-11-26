@@ -12,7 +12,6 @@ class Uradio extends CMS_Controller {
         $this->template->set('datefecha', dateFecha());
         $this->template->set_template('uradio');
         $this->template->set('slider_principal', true);
-
         $this->template->add_js('js/views/radio/coment_face');
 
 
@@ -71,6 +70,63 @@ class Uradio extends CMS_Controller {
         $this->template->set('page_tittle', "UFPS - Cúcuta");
         $this->template->set('page_keywords', "ufps, universidad, francisco, de paula, santander, cucuta, colombia,carreras,ingenierias, pregrados,norte de santander, especializaciones, diplomados,cursos,oriente, matricula, notas, división, sistemas");
         $this->template->set('page_description', "Portal Universidad Francisco de Paula Santander - Cúcuta, Norte de Santander");
+    
+
+        //enviar colectivo que esta sonando en la hora actual para poder mostrarlo en el reproductor
+        $this->load->model('Colectivosradiales_model');     
+        $this->load->model('ProgramacionRadio_model');     
+    
+        $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
+        $dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+        $programacion = [];
+        
+        foreach ($dias as $dia) {
+            $programacion[$dia] = $this->ProgramacionRadio_model->get_programacion_dia($dia);
+        }
+    
+        $colectivos_array = [];
+        foreach ($colectivos as $colectivo) {
+            $colectivos_array[$colectivo->id] = $this->Colectivosradiales_model->get_colectivo($colectivo->id);
+        }
+    
+        // Obtener la hora actual
+        date_default_timezone_set('America/Bogota');
+        $hora_actual = date('H:i');
+        $dia_actual = date('l'); // Obtiene el día actual en inglés
+        $dia_actual = ucfirst($dia_actual); // Capitaliza la primera letra
+        $dias = array(
+            "Sunday" => "Domingo",
+            "Monday" => "Lunes",
+            "Tuesday" => "Martes",
+            "Wednesday" => "Miércoles",
+            "Thursday" => "Jueves",
+            "Friday" => "Viernes",
+            "Saturday" => "Sábado"
+        );
+        $dia_actual= isset($dias[$dia_actual])? $dias[$dia_actual] : "null"  ;
+    
+        // Buscar el colectivo que está sonando
+        $colectivo_actual = null;
+        $programacion_actual = null;
+        if (isset($programacion[$dia_actual])) {
+            foreach ($programacion[$dia_actual] as $programa) {
+                if ($hora_actual >= $programa->hora_inicio && $hora_actual <= $programa->hora_fin) {
+                    $colectivo_actual = $programa->colectivo_id;
+                    $programacion_actual = $programa;
+                    break;
+                }
+            }
+        }
+    
+        // Obtener los detalles del colectivo actual
+        $colectivo_info = null;
+        if ($colectivo_actual && $programacion_actual) {
+            $colectivo_info = $colectivos_array[$colectivo_actual];
+        }
+    
+        // Pasar la información a la vista
+        $this->template->set('programacion_actual', $programacion_actual);
+        $this->template->set('colectivo_actual', $colectivo_info);
     }
 
     public function index() {
@@ -94,7 +150,11 @@ class Uradio extends CMS_Controller {
      //   echo '<pre>'; print_r($popop); return;
 
      //  echo '<pre>'; print_r(hex2bin('6a6f722e32303035')); return;
+        $this->load->model('Colectivosradiales_model');     
 
+        $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
+
+        $this->template->set('colectivos', $colectivos);
         $this->template->set('popop', $popop);
         $this->template->set('destacados_actu', $destacados_actu);
         $this->template->set('noticias_actu', $noticias_actu);
