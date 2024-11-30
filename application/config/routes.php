@@ -97,5 +97,10 @@ $route['oferta-academica/(:any)/(:any)/(:any)'] = 'useccion/index/$1/$2/$3';
 $route['seccion/(:any)/(:any)'] = 'useccion/contenido/$1/$2';
 $route['seccion/calendario'] = 'useccion/calendario';
 
+$route['apiradio/get_programacion'] = 'ApiRadio/get_programacion';
+$route['apiradio/get_colectivos'] = 'ApiRadio/get_colectivos';
+$route['apiradio/get_categorias'] = 'ApiRadio/get_categorias';
+$route['apiradio/get_integrantes'] = 'ApiRadio/get_integrantes';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

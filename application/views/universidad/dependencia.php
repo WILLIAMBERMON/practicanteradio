@@ -390,7 +390,6 @@
     </div>
     <!--/row-->
 
-    <?php include APPPATH . "views/unoticia/noticias_recientes.php"; ?>
 
 </div>
 <!--/container-->

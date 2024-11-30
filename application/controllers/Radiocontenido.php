@@ -114,6 +114,13 @@ class Radiocontenido extends CMS_Controller
          //enviar colectivo que esta sonando en la hora actual para poder mostrarlo en el reproductor
          $this->load->model('Colectivosradiales_model');     
          $this->load->model('ProgramacionRadio_model');     
+         $this->load->model('contenido_model'); 
+            $contenidos = $this->contenido_model->get_all_contenido(195);
+            $array_contenido=[];
+            foreach ($contenidos as $contenido) {
+                $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
+            }
+        $this->template->set('array_contenido', $array_contenido);
      
          $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
          $dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];

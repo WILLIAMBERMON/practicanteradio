@@ -3487,7 +3487,7 @@ public function imagen_principal_radio ($crear,$editar) {
     if(isset($array_contenido["imagen_principal_index_radio"])){
         $primero=false;
         $this->template->set('primero',$primero);
-        $contenido = $this->contenido_model->get_contenido($array_id[$contenido->nombre_contenido]);
+        $contenido = $this->contenido_model->get_contenido($array_id["imagen_principal_index_radio"]);
         if($editar=="true"){
             if (!is_dir($config['upload_path'])) {
                 mkdir($config['upload_path'], 0777);}
@@ -3552,8 +3552,502 @@ public function imagen_principal_radio ($crear,$editar) {
         }
             }
 }
+public function imagen_carrusel_radio ($crear,$editar) {
 
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+    $this->template->add_css('css/pages/pricing/pricing_v8');
+    $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+    $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+    $this->template->add_js("plugins/datatables/js/main");
+    $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->load->helper('form');
+
+    $this->load->model('contenido_model'); 
+    $contenidos = $this->contenido_model->get_all_contenido(195);
+    $array_contenido=[];
+    $array_id=[];
+    foreach ($contenidos as $contenido) {
+        $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
+        $array_id[$contenido->nombre_contenido]=  $contenido->id_contenido ;
+    }
+    $config['upload_path']          = './' . 'public/imagenes/radio/imagen_principal/'; // Carpeta donde se guardarán las imágenes
+    $config['allowed_types']        = 'gif|jpg|png|jpeg';
+    $config['max_size']             = 1024; // Tamaño máximo en KB
+    $config['max_width']            = 1500;
+    $config['max_height']           = 600;
+
+    if(isset($array_contenido["imagen_carrusel_index_radio"])){
+        $primero=false;
+        $this->template->set('primero',$primero);
+        $contenido = $this->contenido_model->get_contenido($array_id["imagen_carrusel_index_radio"]);
+        if($editar=="true"){
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0777);}
+            $this->load->library('upload');
+            $this->upload->initialize($config);
+
+                if(!$this->upload->do_upload('foto')){
+                    $error= array('error' => $this->upload->display_errors());
+                    echo $error['error'];
+                }
+                else{
+                    $data=[];
+                    $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
+
+                    if ($contenido) {
+                        $ruta_imagen = './public/imagenes/radio/imagen_principal/' . $contenido->desc_contenido;
+            
+                        if (file_exists($ruta_imagen)) {
+                            unlink($ruta_imagen);
+                        }
+                    }
+                    $this->contenido_model->update_contenido($array_id[$contenido->nombre_contenido],$data);
+
+                    redirect('administracion/imagen_carrusel_radio/false/false');
+                }             
+        }
+        else{
+            $this->template->set('contenido',$contenido);
+
+            $this->template->render('administracion/admin_radio/imagen_home/administrar_imagen_carrusel');
+
+        }
+    }else{
+
+        $primero=true;
+        $this->template->set('primero',$primero);
+        if($crear=="true"){
+
+        if (!is_dir($config['upload_path'])) {
+            mkdir($config['upload_path'], 0777);}
+        $this->load->library('upload');
+        $this->upload->initialize($config);
+
+            if(!$this->upload->do_upload('foto')){
+                $error= array('error' => $this->upload->display_errors());
+                echo $error['error'];
+            }
+            else{
+                $data=[
+                    "id_seccion"=>"195",
+                    "nombre_contenido"=>"imagen_carrusel_index_radio",
+                ];
+                $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
+            
+                $this->contenido_model->insert($data);
+
+                redirect('administracion/imagen_carrusel_radio/false/false');
+            }               
+        }
+        else{
+            $this->template->render('administracion/admin_radio/imagen_home/administrar_imagen_carrusel');
+        }
+            }
+}
+
+//muestra los Integrantes del equipo de la radio creados para su administracion CRUD
+public function equipo_ufps_radio_index()
+{
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+
+    $this->template->add_css('css/pages/pricing/pricing_v8');
+
+    $this->load->model('contenido_model'); 
+    $contenidos = $this->contenido_model->get_all_contenido(195);
+    $array_contenido=[];
+    foreach ($contenidos as $contenido) {
+        $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
+    }
+    if(isset($array_contenido["equipo_ufps_radio"])){
+        $equipo_radio=json_decode($array_contenido["equipo_ufps_radio"], true);
+    }else{
+        $equipo_radio=[];
+    }
+
+    $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+    $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+    $this->template->add_js("plugins/datatables/js/main");
+    $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+
+    $this->template->set('equipo_radio', $equipo_radio );
+    $this->template->set('item_sidebar_active', 'administrar_secciones');
+
+    $this->template->render('administracion/admin_radio/equipo_ufps_radio/index_equipo_radio');
+}
+public function equipo_ufps_radio_formulario($funcion){
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+
+    $this->template->add_css('css/pages/pricing/pricing_v8');
+    if($funcion=="crear"){
+        $this->template->set('crear', true);
+
+    }else{
+        $this->template->set('crear', false);
+        $this->load->model('contenido_model'); 
+        $contenidos = $this->contenido_model->get_all_contenido(195);
+        $array_id=[];
+        foreach ($contenidos as $contenido) {
+            $array_id[$contenido->nombre_contenido]=  $contenido->id_contenido ;
+        }
+        $contenido = $this->contenido_model->get_contenido($array_id["equipo_ufps_radio"]);
+        $integrantes=json_decode($contenido->desc_contenido,true);
+        $integrante=["foto"=>"","nombre"=>"","cargo"=>"","departamento"=>"","id"=>""];
+        foreach ($integrantes as $integrante_ciclo) {
+            if ($integrante_ciclo['id'] == (int)$funcion) {
+                $integrante=$integrante_ciclo;
+                break;
+            }
+        }
+        $this->template->set('integrante', $integrante);
+        
+    }
+    $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+    $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+    $this->template->add_js("plugins/datatables/js/main");
+    $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+
+    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->render('administracion/admin_radio/equipo_ufps_radio/equipo_radio_formulario');
+}
+
+// Guardar o editar un nuevo Integrante de la radio
+public function equipo_ufps_radio_editar_crear () {
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+        
+        $config['upload_path']          = './' . 'public/imagenes/radio/equipo_radio/'; // Carpeta donde se guardarán las imágenes
+        $config['allowed_types']        = 'gif|jpg|png|jpeg';
+        $config['max_size']             = 1024; // Tamaño máximo en KB
+        $config['max_width']            = 600;
+        $config['max_height']           = 600;
+        if (!is_dir($config['upload_path'])) {
+            mkdir($config['upload_path'], 0777);
+        }
+        $this->load->library('upload');
+        $this->upload->initialize($config);
+
+        
+            // Obtener los datos del formulario
+        $data = [
+        'id' => $this->input->post('id') ? (int)$this->input->post('id') : null, // Null para nuevos integrantes
+        'nombre' => $this->input->post('nombre'),
+        'cargo' => $this->input->post('cargo'),
+        'departamento' => $this->input->post('departamento')
+        ];
+        $this->load->model('contenido_model'); 
+        $contenidos = $this->contenido_model->get_all_contenido(195);
+        $array_contenido=[];
+        $array_id=[];
+        foreach ($contenidos as $contenido) {
+            $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
+            $array_id[$contenido->nombre_contenido]=  $contenido->id_contenido ;
+        }
+        if(isset($array_id["equipo_ufps_radio"])){
+
+            $integrantes = isset($array_contenido["equipo_ufps_radio"]) ? json_decode($array_contenido["equipo_ufps_radio"], true) : [];
     
+            if ($data['id']) {
+                
+                if ($_FILES["foto"]['size'] == 0) {
+                    // Editar un integrante existente
+                    foreach ($integrantes as &$integrante) {
+                        if ($integrante['id'] == $data['id']) {
+                            $data["foto"]=$integrante["foto"];
+                            $integrante = $data; // Sobrescribe el existente
+                            break;
+                        }
+                    }
+                    $BD_guardar=["desc_contenido"=>json_encode($integrantes)];
+                    $this->contenido_model->update_contenido($array_id["equipo_ufps_radio"],$BD_guardar);
+                    redirect('administracion/equipo_ufps_radio_index');
+                
+                } else {
+                    if(!$this->upload->do_upload('foto')){
+                        $error= array('error' => $this->upload->display_errors());
+                        echo $error['error'];
+                    }
+                    else{
+                        $data['foto'] = $this->upload->data('file_name'); // Guardar el nombre del archivo 
+                        $foto_integrante = null;
+ 
+                        // Editar un integrante existente
+                        foreach ($integrantes as &$integrante) {
+                            if ($integrante['id'] == $data['id']) {
+                                $foto_integrante =$integrante['foto'];
+                                $integrante = $data; // Sobrescribe el existente
+                                break;
+                            }
+                        }                  
+    
+                        if (isset($foto_integrante)) {
+                            $ruta_imagen = './public/imagenes/radio/equipo_radio/' . $foto_integrante ;
+                
+                            if (file_exists($ruta_imagen)) {
+                                unlink($ruta_imagen);
+                            }
+                        }
+    
+                    $BD_guardar=["desc_contenido"=>json_encode($integrantes)];
+                    $this->contenido_model->update_contenido($array_id["equipo_ufps_radio"],$BD_guardar);
+                    redirect('administracion/equipo_ufps_radio_index');
+                    }
+    
+                    
+                }
+            } else {
+                // Asignar ID autoincremental al nuevo integrante
+                $data['id'] = !empty($integrantes) ? max(array_column($integrantes, 'id')) + 1 : 1;
+               
+            
+                if (!$this->upload->do_upload('foto')) {
+        
+                    // La subida ha fallado
+                    $error = array('error' => $this->upload->display_errors());
+                    // Mostrar el mensaje de error
+                    $dataupload = $this->upload->data();
+                    echo $error['error'];
+        
+                }else{
+                    $data['foto'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
+                    $integrantes[] = $data; // Agregar al listado
+                    $BD_guardar=["desc_contenido"=>json_encode($integrantes)];
+                    $this->contenido_model->update_contenido($array_id["equipo_ufps_radio"],$BD_guardar);
+                    redirect('administracion/equipo_ufps_radio_index');
+                }
+    
+                
+            }
+        }
+        else{
+            $data=[
+                "id_seccion"=>"195",
+                "nombre_contenido"=>"equipo_ufps_radio",
+            ];
+            $this->contenido_model->insert($data);
+            redirect('administracion/equipo_ufps_radio_index');
+        }
+}
+public function equipo_ufps_radio_eliminar ($id) {
+    if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+        $this->_validar_login('radio');
+    else
+        $this->_validar_login('admin');
+            $this->load->model('contenido_model'); 
+            $contenidos = $this->contenido_model->get_all_contenido(195);
+            $array_id=[];
+            foreach ($contenidos as $contenido) {
+                $array_id[$contenido->nombre_contenido]=  $contenido->id_contenido ;
+            }
+            $contenido = $this->contenido_model->get_contenido($array_id["equipo_ufps_radio"]);
+            $integrantes=json_decode($contenido->desc_contenido,true);
+            $foto_integrante= "";
+            foreach ($integrantes as &$integrante) {
+                if ($integrante['id'] == (int)$id) {
+                    $foto_integrante=$integrante["foto"];
+                    break;
+                }
+            }
+            
+            if (isset($foto_integrante)) {
+                $ruta_imagen = './public/imagenes/radio/equipo_radio/' . $foto_integrante ;
+    
+                if (file_exists($ruta_imagen)) {
+                    unlink($ruta_imagen);
+                }
+            }
+            // Buscar y eliminar por ID
+            $integrantes = array_filter($integrantes, function($integrante) use ($id) {
+                return $integrante['id'] != $id;
+            });
+            
+            $BD_guardar=["desc_contenido"=>json_encode($integrantes)];
+            $this->contenido_model->update_contenido($array_id["equipo_ufps_radio"],$BD_guardar);
+            redirect('administracion/equipo_ufps_radio_index');
+
+        }
+
+public function documentos_integrate_radio_index (){
+            if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+                $this->_validar_login('radio');
+            else
+                $this->_validar_login('admin');
+            $this->template->add_css('css/pages/pricing/pricing_v8');
+            $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+            $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+            $this->template->add_js("plugins/datatables/js/main");
+            $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+            $this->template->set('item_sidebar_active', 'administrar_secciones');
+            $this->load->helper('form');
+
+            $this->load->model('contenido_model'); 
+            $contenidos = $this->contenido_model->get_all_contenido(195);
+            $array_contenido=[];
+            $array_id=[];
+            foreach ($contenidos as $contenido) {
+                $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
+                $array_id[$contenido->nombre_contenido]=  $contenido->id_contenido ;
+            }
+
+            if (!isset($array_id["pdf_creacion_colectivos_radiales"])) {
+            $data=[
+                "id_seccion"=>"195",
+                "nombre_contenido"=>"pdf_creacion_colectivos_radiales",
+            ];
+            $this->contenido_model->insert($data);
+            redirect('administracion/documentos_integrate_radio_index'); 
+
+            } else if (!isset($array_id["estilo_rruc_radio"])) {
+            $data=[
+                "id_seccion"=>"195",
+                "nombre_contenido"=>"estilo_rruc_radio",
+            ];
+            $this->contenido_model->insert($data);
+            redirect('administracion/documentos_integrate_radio_index');
+
+            }else if (!isset($array_id["etica_estilo_ufps_radio"])) {
+            $data=[
+                "id_seccion"=>"195",
+                "nombre_contenido"=>"etica_estilo_ufps_radio",
+            ];
+            $this->contenido_model->insert($data);
+            redirect('administracion/documentos_integrate_radio_index'); 
+
+            }
+
+            $this->template->set('array_contenido', $array_contenido);
+
+            $this->template->render('administracion/admin_radio/admin_documentos_radio/index_documentos');
+
+            
+    }
+
+public function documentos_integrate_radio ($nombre) {
+
+            if($this->session->userdata(SESSION_NAME)->rol == 'radio')
+                $this->_validar_login('radio');
+            else
+                $this->_validar_login('admin');
+            $this->template->add_css('css/pages/pricing/pricing_v8');
+            $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
+            $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
+            $this->template->add_js("plugins/datatables/js/main");
+            $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
+            $this->template->set('item_sidebar_active', 'administrar_secciones');
+        
+            $this->load->model('contenido_model'); 
+            $contenidos = $this->contenido_model->get_all_contenido(195);
+            $array_contenido=[];
+            $array_id=[];
+            foreach ($contenidos as $contenido) {
+                $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
+                $array_id[$contenido->nombre_contenido]=  $contenido->id_contenido ;
+            }
+            $config['upload_path']          = './' . 'public/archivos/pdf_radio/'; // Carpeta donde se guardarán las imágenes
+            $config['allowed_types']        = 'txt|xls|xlsx|doc|docx|pdf|PDF|ppt|pptx|docm';
+            $this->load->library('upload');
+            $this->upload->initialize($config);
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0777);
+            }
+
+
+            if($nombre=="pdf_creacion_colectivos_radiales"){
+                if (isset($array_id["pdf_creacion_colectivos_radiales"])) {
+                    $contenido = $this->contenido_model->get_contenido($array_id["pdf_creacion_colectivos_radiales"]); 
+                    if(!$this->upload->do_upload('documento')){
+                        $error= array('error' => $this->upload->display_errors());
+                        echo $error['error'];
+                    }else{
+                    $data=[];
+                    $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
+    
+                    if ($contenido) {
+                        $ruta_pdf = './public/archivos/pdf_radio/' . $contenido->desc_contenido;
+            
+                        if (file_exists($ruta_pdf)) {
+                            unlink($ruta_pdf);
+                        }
+                    $this->contenido_model->update_contenido($array_id[$contenido->nombre_contenido],$data);
+    
+                    }
+                }
+                    redirect('administracion/documentos_integrate_radio_index');       
+                }
+            }
+            if($nombre=="estilo_rruc_radio"){
+            if (isset($array_id["estilo_rruc_radio"])) {
+                $contenido = $this->contenido_model->get_contenido($array_id["estilo_rruc_radio"]);
+                if(!$this->upload->do_upload('documento')){
+                    $error= array('error' => $this->upload->display_errors());
+                    echo $error['error'];
+                }else{
+                    $data=[];
+                    $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
+    
+                    if ($contenido) {
+                        $ruta_pdf = './public/archivos/pdf_radio/' . $contenido->desc_contenido;
+            
+                        if (file_exists($ruta_pdf)) {
+                            unlink($ruta_pdf);
+                        }
+                    $this->contenido_model->update_contenido($array_id[$contenido->nombre_contenido],$data);
+    
+                    }
+                }
+                    redirect('administracion/documentos_integrate_radio_index');          
+            }}
+            if($nombre=="etica_estilo_ufps_radio"){
+            if (isset($array_id["etica_estilo_ufps_radio"])) {
+                $contenido = $this->contenido_model->get_contenido($array_id["etica_estilo_ufps_radio"]);
+                if(!$this->upload->do_upload('documento')){
+                    $error= array('error' => $this->upload->display_errors());
+                    echo $error['error'];
+                }else{
+                    $data=[];
+                    $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
+    
+                    if ($contenido) {
+                        $ruta_pdf = './public/archivos/pdf_radio/' . $contenido->desc_contenido;
+            
+                        if (file_exists($ruta_pdf)) {
+                            unlink($ruta_pdf);
+                        }
+                    $this->contenido_model->update_contenido($array_id[$contenido->nombre_contenido],$data);
+    
+                    }
+                }
+                    redirect('administracion/documentos_integrate_radio_index');  
+            
+            }}
+            
+                         
+        }
+                
+           
+        
+                    
+                       
+                                   
+                
+                
+        
+
+
+  
+
+
     public function documento_contenido_titulo()
     {
         
@@ -3586,7 +4080,7 @@ public function imagen_principal_radio ($crear,$editar) {
         $this->template->render('administracion/documento_contenido/index');
     }
 
-    public function editar_documento_contenido_titulo()
+ public function editar_documento_contenido_titulo()
     {
         if($this->session->userdata(SESSION_NAME)->rol == 'radio')
             $this->_validar_login('radio');

@@ -75,6 +75,14 @@ class Uradio extends CMS_Controller {
         //enviar colectivo que esta sonando en la hora actual para poder mostrarlo en el reproductor
         $this->load->model('Colectivosradiales_model');     
         $this->load->model('ProgramacionRadio_model');     
+        $this->load->model('contenido_model'); 
+            $contenidos = $this->contenido_model->get_all_contenido(195);
+            $array_contenido=[];
+            foreach ($contenidos as $contenido) {
+                $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
+            }
+        $this->template->set('array_contenido', $array_contenido);
+
     
         $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
         $dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
@@ -98,10 +106,10 @@ class Uradio extends CMS_Controller {
             "Sunday" => "Domingo",
             "Monday" => "Lunes",
             "Tuesday" => "Martes",
-            "Wednesday" => "Miércoles",
+            "Wednesday" => "Miercoles",
             "Thursday" => "Jueves",
             "Friday" => "Viernes",
-            "Saturday" => "Sábado"
+            "Saturday" => "Sabado"
         );
         $dia_actual= isset($dias[$dia_actual])? $dias[$dia_actual] : "null"  ;
     
@@ -154,7 +162,32 @@ class Uradio extends CMS_Controller {
 
         $colectivos = $this->Colectivosradiales_model->get_all_colectivos();
 
+        
+        $this->load->model('contenido_model'); 
+        $contenidos = $this->contenido_model->get_all_contenido(195);
+        $array_contenido=[];
+        $array_id=[];
+        foreach ($contenidos as $contenido) {
+            $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
+            $array_id[$contenido->nombre_contenido]=  $contenido->id_contenido ;
+
+        }
+        if(isset($array_id["equipo_ufps_radio"])){
+            $equipo_radio=json_decode($array_contenido["equipo_ufps_radio"], true);
+        }else{
+            $equipo_radio=[];
+        }
+        $this->template->set('equipo_radio', $equipo_radio );
+        
+        
+        if(isset($array_id["imagen_carrusel_index_radio"])){
+            $img_carrusel = $this->contenido_model->get_contenido($array_id["imagen_carrusel_index_radio"]);
+        }else{
+            $img_carrusel ="vacio";
+        }
+
         $this->template->set('colectivos', $colectivos);
+        $this->template->set('img_carrusel', $img_carrusel);
         $this->template->set('popop', $popop);
         $this->template->set('destacados_actu', $destacados_actu);
         $this->template->set('noticias_actu', $noticias_actu);

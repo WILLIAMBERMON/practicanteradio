@@ -219,6 +219,7 @@
                                     });
                                 });
                         </script>
+
                      </div>      
                     <div class="col-sm-4 col-xs-2 clearfix">
                         <i class="fa fa-search search-btn pull-right"></i>
@@ -348,7 +349,58 @@
       <div class="container">
     <img src="https://ww2.ufps.edu.co/public/imagenes/template/header/pendon-emisora.png" alt="Logo" class="logo-navbar-radio">
 
-        <?php echo $menuprincipal->desc_contenido; ?>
+    <ul class="nav navbar-nav">
+                <!-- Home -->
+                <li>
+                    <a id="nosotros" href="/radiocontenido/radio-ufps/1785">
+                        Nosotros
+                    </a>
+                </li>
+                <!-- End Home -->
+                <li>
+                    <a id="programacion" href="/radiocontenido/programacion-ufps-radio/1890">
+                        Programación
+                    </a>
+                </li>
+                <li>
+                    <a id="programacion" href="/radiocontenido/colectivos-radiales-ufps-radio/1784">
+                        Colectivos Radiales UFPS RADIO
+                    </a>
+                </li>
+                <!-- Pages -->
+                <li>
+                    <a id="contacto" href="/radiocontenido/radio-ufps/1786">
+                        Contacto
+                    </a> 
+            </li>
+            <li class="dropdown">
+                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                    Intégrate a la UFPS Radio
+                </a>
+                <ul class="dropdown-menu">
+                <?php
+                $pdf1= isset($array_contenido["pdf_creacion_colectivos_radiales"]) ? $array_contenido["pdf_creacion_colectivos_radiales"] : null ;
+                $pdf2= isset($array_contenido["estilo_rruc_radio"]) ? $array_contenido["estilo_rruc_radio"] : null ;
+                $pdf3= isset($array_contenido["etica_estilo_ufps_radio"]) ? $array_contenido["etica_estilo_ufps_radio"] : null ;
+
+                ?>
+                <?php if(isset($pdf1)): ?>
+                    <li><a href="<?php echo base_url("public/archivos/pdf_radio/" . $pdf1 ); ?>" target="_blank">Instructivo Creación Colectivos Radiales</a></li>
+                <?php endif; ?> 
+                <?php if(isset($pdf2)): ?>           
+                    <li><a href="<?php echo base_url("public/archivos/pdf_radio/" . $pdf2 ); ?>" target="_blank">Manual de estilo RRUC</a></li>
+                <?php endif; ?>    
+                <?php if(isset($pdf3)): ?>        
+                    <li><a href="<?php echo base_url("public/archivos/pdf_radio/" . $pdf3 ); ?>" target="_blank">Manual de ética y estilo UFPS Radio</a></li>
+                <?php endif; ?>            
+                </ul>
+            </li>
+            
+            <!-- End Blog -->
+
+          
+ 
+            </ul>        
       </div>
     </div>
   </div>

@@ -6,13 +6,31 @@
 <style>
   /* Contenedor principal del carrusel */
   .swiper-container {
-    width: 100%;
-    height: 450px;
-    background-image: url("https://s2.abcstatics.com/media/bienestar/2022/01/01/musica-clasica-beneficios-k7IG--1248x698@abc.jpg"); 
-    background-size: cover;
-    background-position: center;
-    overflow: hidden; /* Para evitar el scroll horizontal */
-  }
+  width: 100%;
+  height: 450px;
+  position: relative; /* Necesario para posicionar el pseudo-elemento */
+  overflow: hidden; /* Evita desbordamientos */
+}
+
+.swiper-container::before {
+  content: ""; /* Crea el pseudo-elemento */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("<?php echo base_url('public/imagenes/radio/imagen_principal/' . $img_carrusel->desc_contenido); ?>");
+  background-size: cover; /* Asegura que la imagen cubra todo el contenedor */
+  background-position: center; /* Centra la imagen */
+  filter: blur(3px); /* Desenfoque */
+  z-index: 1; /* Coloca el pseudo-elemento detrás del contenido */
+}
+
+.swiper-wrapper {
+  position: relative; /* Asegura que el contenido esté por encima del pseudo-elemento */
+  z-index: 2; /* Coloca el contenido por encima del pseudo-elemento */
+}
+
 
   .swiper-slide {
   display: flex;
@@ -129,6 +147,35 @@
         height: 95%;
         
       }
+      
+.tarjeta:hover {
+    transform: scale(1.01);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tarjeta h4 {
+    position: relative;
+    font-size: 1.5rem;
+    color: #555;
+    margin-bottom: 8px;
+    font-style: italic;
+    transition: color 0.3s ease;
+}
+
+.tarjeta h4::after {
+    content: "";
+    position: absolute;
+    bottom: -5px; /* Justo debajo del texto */
+    left: 0;
+    width: 0;
+    height: 1px; /* El grosor de la línea */
+    background-color: #8B0000; /* Color rojo */
+    transition: width 0.3s ease; /* Animación de expansión */
+}
+
+.tarjeta:hover h4::after {
+    width: 100%; /* Expande la línea al 100% cuando se hace hover */
+}
       .img-equipo {
         border-radius: 50%;
         width: 170px;
@@ -198,68 +245,43 @@
       margin-top: 10px;
     }
 
+
 </style>
 <h2 class="section-title-equipo">Equipo UFPS Radio 95.2 FM</h2>
 <div class="container" style="background-color: #F8F8FF;">
   <br>
   <div id="carrusel" class="carousel slide" data-ride="carousel">
-    <ol class="carousel-indicators">
-      <li data-target="#carrusel" data-slide-to="0" class="active"></li>
-      <li data-target="#carrusel" data-slide-to="1"></li>
-      <li data-target="#carrusel" data-slide-to="2"></li>
-      <li data-target="#carrusel" data-slide-to="3"></li>
-      <li data-target="#carrusel" data-slide-to="4"></li>
-      <li data-target="#carrusel" data-slide-to="5"></li>
-    </ol>
+    
     <div class="carousel-inner" role="listbox">
-      <div class="item active">
-        <div class="tarjeta">
-          <img class="img-equipo" src="<?php echo base_url("public/imagenes/radio/equipo/felix.jpg"); ?>" alt="">
-          <h3>Félix Joaquín Lozano Cardenas</h3>
-          <h4>Coordinador - CECOM</h4>
-          <p>CECOM</p>
-        </div>
-      </div>
-      <div class="item">
-        <div class="tarjeta">
-          <img class="img-equipo" src="<?php echo base_url("public/imagenes/radio/equipo/grecia.jpg"); ?>" alt="">
-          <h3>Grecia Karina Corzo Mendoza</h3>
-          <h4>Jefe de producción y programación</h4>
-          <p>UFPSRadio 95.2F.M.</p>
-        </div>
-      </div>
-      <div class="item">
-        <div class="tarjeta">
-          <img class="img-equipo" src="<?php echo base_url("public/imagenes/radio/equipo/jessica.jpg"); ?>" alt="">
-          <h3>Jessica Barrera Pinto</h3>
-          <h4>Productora Radial</h4>
-          <p>UFPSRadio 95.2F.M.</p>
-        </div>
-      </div>
-      <div class="item">
-        <div class="tarjeta">
-          <img class="img-equipo" src="<?php echo base_url("public/imagenes/radio/equipo/jesus.jpg"); ?>" alt="">
-          <h3>Jesús Enrique Hernández Contreras</h3>
-          <h4>Dj y Control Master</h4>
-          <p>UFPSRadio 95.2F.M.</p>
-        </div>
-      </div>
-      <div class="item ultima">
-        <div class="tarjeta">
-          <img class="img-equipo" src="<?php echo base_url("public/imagenes/radio/equipo/miguel.jpg"); ?>" alt="">
-          <h3>Miguel Ángel Estévez Restrepo</h3>
-          <h4>Control Master</h4>
-          <p>UFPSRadio 95.2F.M.</p>
-        </div>
-      </div>
-      <div class="item">
-        <div class="tarjeta">
-          <img class="img-equipo" src="<?php echo base_url("public/imagenes/radio/equipo/patricia.jpg"); ?>" alt="">
-          <h3>Carmen Patricia Álvarez Cáceres</h3>
-          <h4>Secretaria</h4>
-          <p>CECOM</p>
-        </div>
-      </div>
+    <?php 
+      $isFirst = true; 
+      $total = count($equipo_radio); // Total de integrantes
+      $penultimoIndex = $total - 2; // Índice del penúltimo elemento
+
+      foreach ($equipo_radio as $index => $integrante): ?>
+          <div class="item <?php 
+              echo $isFirst ? "active" : ""; 
+              echo $index === $penultimoIndex ? " ultima" : ""; // Agregar clase "ultima" al penúltimo
+          ?>">
+              <div class="tarjeta">
+                  <img class="img-equipo" src="<?php echo base_url("public/imagenes/radio/equipo_radio/" . $integrante["foto"]); ?>" alt="">
+                  <h3 style="font-size: 2.5rem; color: #8B0000; margin-bottom: 10px; font-weight: bold;">
+                      <?php echo $integrante["nombre"]; ?>
+                  </h3>
+                  <h4 style="font-size: 1.5rem; color: #555; margin-bottom: 8px; font-style: italic;">
+                      <?php echo $integrante["cargo"]; ?>
+                  </h4>
+                  <p style="font-size: 1.2rem; color: #777; margin-bottom: 0;">
+                      <?php echo $integrante["departamento"]; ?>
+                  </p>
+              </div>
+          </div>
+          <?php $isFirst = false; // Cambiar a false después de la primera iteración ?>
+      <?php endforeach; ?>
+
+      
+      
+      
     </div>
     <a class="left carousel-control carousel-control-custom" href="#carrusel" role="button" data-slide="prev">
       <span class="glyphicon glyphicon-chevron-left" style="color:red" aria-hidden="true"></span>
