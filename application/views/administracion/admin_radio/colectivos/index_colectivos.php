@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <h1>Lista de Colectivos</h1>
-<h1><?= ($item_sidebar_active) ?></h1>
 
 <a href="<?php echo site_url('administracion/crear_colectivo'); ?>" class="btn btn-primary">Crear Nuevo Colectivo</a>
 <a href="<?php echo site_url('administracion/categorias_colectivo'); ?>" class="btn btn-primary">Crear Categoria</a>

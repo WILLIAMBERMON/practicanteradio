@@ -28,7 +28,7 @@ class ApiRadio extends CI_Controller {
 
     // Obtener categorías
     public function get_categorias() {
-        $data = $this->Colectivosradiales_model->obtener_categorias();
+        $data = $this->Colectivosradiales_model->get_all_categorias();
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($data));
@@ -41,13 +41,13 @@ class ApiRadio extends CI_Controller {
             $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
         }
         if(isset($array_contenido['equipo_ufps_radio'])) {
-        $data = $array_contenido['equipo_ufps_radio'];
+        $data = json_decode($array_contenido['equipo_ufps_radio']);
         }else{
             $data = ["vacio"=>"no se han cargado integrantes"];
         }
 
         $this->output
             ->set_content_type('application/json')
-            ->set_output($data);
+            ->set_output(json_encode($data));
 }
 }

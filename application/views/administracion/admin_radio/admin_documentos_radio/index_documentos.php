@@ -32,7 +32,7 @@
             <td>
             <?php echo form_open_multipart(base_url('administracion/documentos_integrate_radio/pdf_creacion_colectivos_radiales')); ?>
                 <div class="form-group">
-                    <?php echo form_label('Documento integrate radio', 'documento',''); ?>
+                    <?php echo form_label('Documento pdf creacion colectivos radiales', 'documento',''); ?>
                     <?php echo form_upload('documento',"",'class="form-control"'); ?>
                 </div>
             
@@ -54,7 +54,7 @@
             <td>
             <?php echo form_open_multipart(base_url('administracion/documentos_integrate_radio/estilo_rruc_radio')); ?>
                 <div class="form-group">
-                    <?php echo form_label('Documento integrate radio', 'documento',''); ?>
+                    <?php echo form_label('Documento estilo rruc radio', 'documento',''); ?>
                     <?php echo form_upload('documento',"",'class="form-control"'); ?>
                 </div>
             
@@ -76,7 +76,7 @@
             <td>
             <?php echo form_open_multipart(base_url('administracion/documentos_integrate_radio/etica_estilo_ufps_radio')); ?>
                 <div class="form-group">
-                    <?php echo form_label('Documento integrate radio', 'documento',''); ?>
+                    <?php echo form_label('Documento etica estilo ufps radio', 'documento',''); ?>
                     <?php echo form_upload('documento',"",'class="form-control"'); ?>
                 </div>
             

@@ -21,6 +21,12 @@ public function obtener_categorias() {
 
     return $categorias;
 }
+//obtener las categorias para la API
+public function get_all_categorias() {
+    // Obtenemos las categorías de la base de datos
+    $query = $this->db->get('categoria_colectivo');
+    return $query->result();
+}
 // Insertar una nueva categoria
 public function insert_categoria($data) {
     return $this->db->insert('categoria_colectivo', $data);

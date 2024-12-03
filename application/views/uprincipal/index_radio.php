@@ -256,7 +256,7 @@
     <?php 
       $isFirst = true; 
       $total = count($equipo_radio); // Total de integrantes
-      $penultimoIndex = $total - 2; // Índice del penúltimo elemento
+      $penultimoIndex = $total - 1; // Índice del penúltimo elemento
 
       foreach ($equipo_radio as $index => $integrante): ?>
           <div class="item <?php 
