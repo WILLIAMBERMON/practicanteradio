@@ -1,7 +1,12 @@
 
 
 <!-- CARRUSEL CON LOS COLECTIVOS RADIALES -->
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+<link rel="stylesheet" href="<?php echo base_url("assets/plugins/swiper/css/swiper-bundle.min.css")?>">
+<!--<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">-->
+
+<!-- Scripts de Swiper.js -->
+<!--<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>-->
+<script src="<?php echo base_url("assets/plugins/swiper/js/swiper-bundle.min.js")?>"></script>
 
 <style>
   /* Contenedor principal del carrusel */
@@ -108,8 +113,6 @@
  
 </div>
 
-<!-- Scripts de Swiper.js -->
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script>
   const swiper = new Swiper('.swiper-container', {
     loop: true,  // Repetición infinita
@@ -294,7 +297,7 @@
    
   </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
 
 <script>
   $(document).ready(function() {

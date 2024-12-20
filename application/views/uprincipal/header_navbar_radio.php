@@ -142,8 +142,9 @@
                                     }
      
                             </style>
-                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+                            
                         <div class="audio-container">
+                            
                             <div class="player">
                                     <button id="play" class="boton-reproductor" style="display:none;">
                                         <i class="fas fa-play"></i> 
@@ -155,7 +156,8 @@
                                         <source src="https://apps.ufps.edu.co/emisoraufps" type="audio/mpeg">
                                     </audio>
                             </div>
-                                
+                            
+
                             <div class="contenedor-informacion" style="width:70%; text-align: center;">
                             <p style="font-weight: bold; font-size: 1.3em; margin: 1px; color: #333;">
                                 <?php echo $colectivo_actual ? $colectivo_actual->titulo : "En Directo - UFPS"; ?>
@@ -181,27 +183,36 @@
                             
                             <img class="station-logo" src="<?php echo $colectivo_actual ? base_url("public/imagenes/radio/colectivos/" . $colectivo_actual->foto)  : base_url("public/imagenes/template/header/pendon-emisora.png"); ?>" alt="Radio Logo">
                         </div>
-                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
                         <script>
                             $(document).ready(function() {
-                                    var audio = $('#audio')[0];
+                                    const $audio = $('#audio');
+                                    const $playButton = $('#play');
+                                    const $pauseButton = $('#pause');
 
-                                    $('#play').click(function() {
-                                        audio.play();
-                                        $(this).hide();
-                                        $('#pause').show();
+                                    // Intentar reproducir al cargar
+                                    $audio.prop('autoplay', true).prop('muted', true);
+                                    $audio[0].play().catch(() => {
+                                        // Mostrar el botón de reproducción si el autoplay falla
+                                        $playButton.show();
+                                        $pauseButton.hide();
                                     });
 
-                                    $('#pause').click(function() {
-                                        audio.pause();
-                                        $(this).hide();
-                                        $('#play').show();
+                                    // Reproducción al interactuar con el botón
+                                    $playButton.on('click', function () {
+                                        $audio.prop('muted', false)[0].play();
+                                        $playButton.hide();
+                                        $pauseButton.show();
                                     });
 
+                                    $pauseButton.on('click', function () {
+                                        $audio[0].pause();
+                                        $playButton.show();
+                                        $pauseButton.hide();
+                                    });
                                     $('#volume').on('input', function() {
                                         audio.volume = $(this).val();
-                                        console.log("valor = "+ $(this).val() );
+                                        //console.log("valor = "+ $(this).val() );
                                         if ($(this).val() >= 0.5) {
                                             $('.icono-volume-').addClass('hidden');
                                             $('.icono-volume0').addClass('hidden');

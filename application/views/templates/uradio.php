@@ -33,16 +33,21 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
     <!-- Favicon -->
     <link href='<?php echo base_url("assets/img/ico/favicon.ico"); ?>' rel='Shortcut icon'>
 
     <!-- Web Fonts -->
     <link rel='stylesheet' type='text/css' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin'>
 
+    <link rel="stylesheet" href="<?php echo base_url("assets/plugins/font-awesome/6.0/all.min.css")?>">
+
     <?= $_css ?>
 
+    <script src="<?php echo base_url("assets/plugins/jquery/jQuery-3.5.1.min.js")?>"></script>
+
     <?php if (isset($popop)) : ?>
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        <!--<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>-->
         <script>
             $(document).ready(function() {
                 $("#mostrarmodal").modal("show");

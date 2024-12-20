@@ -52,6 +52,7 @@ class Administracion extends CMS_Controller
         $this->template->add_css('plugins/horizontal-parallax/css/horizontal-parallax.min');
         $this->template->add_css('plugins/owl-carousel/owl-carousel/owl.carousel.min');
         $this->template->add_css('plugins/font-awesome/css/font-awesome.min');
+        //$this->template->add_css('plugins/font-awesome/6.0.0-beta3/css/all.min.css');
         $this->template->add_css('plugins/line-icons/line-icons.min');
         $this->template->add_css('plugins/animate.min');
         $this->template->add_css('css/footers/footer-v1.min');
@@ -3005,9 +3006,18 @@ public function eliminarCategoriaColectivo ($id) {
     else
         $this->_validar_login('admin');
 
-
     $this->load->model('Colectivosradiales_model'); 
-    $this->Colectivosradiales_model->delete_categoria($id);
+    $colectivos = $this->Colectivosradiales_model->get_colectivo_categoria($id);
+    if (!empty($colectivos)) 
+    {
+        $this->session->set_flashdata('error', 'No se puede eliminar la categoría porque tiene colectivos asociados');
+    }
+    else
+    {
+        $this->Colectivosradiales_model->delete_categoria($id);
+        $this->session->set_flashdata('success', 'Categoría eliminada correctamente');
+    }
+    
     redirect("administracion/categorias_colectivo/");
 
 }
@@ -3076,7 +3086,7 @@ public function store_colectivo () {
         $config['max_width']            = 800;
         $config['max_height']           = 500;
         if (!is_dir($config['upload_path'])) {
-            mkdir($config['upload_path'], 0777);
+            mkdir($config['upload_path'], 0777, true);
         }
         $this->load->library('upload');
         $this->upload->initialize($config);
@@ -3462,6 +3472,7 @@ public function imagen_principal_radio ($crear,$editar) {
         $this->_validar_login('radio');
     else
         $this->_validar_login('admin');
+    //$this->template->add_js("plugins/jquery/jQuery-3.5.1.min");
     $this->template->add_css('css/pages/pricing/pricing_v8');
     $this->template->add_js("plugins/datatables/js/dataTables.bootstrap.min");
     $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
@@ -3959,7 +3970,7 @@ public function documentos_integrate_radio ($nombre) {
             $this->load->library('upload');
             $this->upload->initialize($config);
             if (!is_dir($config['upload_path'])) {
-                mkdir($config['upload_path'], 0777);
+                mkdir($config['upload_path'], 0777,true);
             }
 
 

@@ -23,7 +23,7 @@ class Uradio extends CMS_Controller {
         $this->template->add_js('js/plugins/datepicker.min');
         $this->template->add_js('js/plugins/owl-carousel.min');
         $this->template->add_js('js/app.min');
-        $this->template->add_js('js/plugins/custom.min');
+        //$this->template->add_js('js/plugins/custom.min');
         $this->template->add_js('plugins/layer-slider/layerslider/js/layerslider.kreaturamedia.jquery');
         $this->template->add_js('plugins/layer-slider/layerslider/js/layerslider.transitions');
         $this->template->add_js('plugins/layer-slider/layerslider/js/greensock');
