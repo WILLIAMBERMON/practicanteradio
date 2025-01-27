@@ -40,7 +40,7 @@
 <br>
     <script src="<?php echo base_url("assets/plugins/jquery/jQuery-3.5.1.min.js")?>"></script>
 
-<table class="table table-striped table-bordered table-hover">
+<table id="table_categoria" class="table table-striped table-hover table-bordered text-center" style="width: 100%;">
     <thead>
         <tr>
             <th style="width: 10%;">ID</th>
@@ -81,16 +81,27 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-</div>
-
 <a class="btn btn-danger pull-left" href="<?php echo site_url('administracion/getColectivosRadiales'); ?>"
 style="margin-left:10px;" bis_skin_checked="1">
     <i class="fa fa-backward"></i> Regresar
 </a>
+<br>
+<br>
+</div>
+
 
 
 <script>
     $(document).ready(function () {
+
+
+        $('#table_categoria').DataTable({
+            "language": {
+            "url": "/assets/plugins/datatables/lenguaje/spanish.json"
+            }
+        });
+
+
         // Manejar clic en el botón Editar
         $(document).on('click', '.btn-edit', function (e) {
             e.preventDefault();

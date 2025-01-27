@@ -1,7 +1,7 @@
 <div class="row no-margin margin-top-40">
 <div class="col-md-9">
     <div class="">
-        <h1 class="text-justify">Administración del portal</h1>
+        <h1 class="text-justify">Administración del portal de la Radio UFPS</h1>
         <hr style="margin: 30px 0px 30px 0px;">
         <p class="text-info" style="margin: 0px 0px 30px 0px;">
             Inicie sesión en este módulo podra editar la información compartida en el portal.

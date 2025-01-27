@@ -24,9 +24,7 @@
                 <?php echo form_dropdown('dia_transmicion', $dias,$programacion->dia,'class="form-control" id="categoria_id"'); ?>
             </div>
             
-                
-
-            <?php echo form_submit('submit', 'Guardar Programacion'); ?>
+            <?php echo form_submit('submit', 'Guardar Programacion', 'class="btn btn-primary"'); ?>
         <?php echo form_close(); ?>
        
     </div>

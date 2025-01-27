@@ -172,13 +172,7 @@ class Seccion_model extends CI_Model {
 
     public function validar_seccion($id_seccion) 
     {
-        $query = $this->db->query(" SELECT count(id_estilo) as cantidad, 'estilo_seccion' as tabla
-                                    FROM estilo_seccion
-                                    WHERE id_seccion = '{$id_seccion}'
-
-                                    UNION ALL
-
-                                    SELECT count(id_contenido) as cantidad, 'p_contenido' as tabla
+        $query = $this->db->query(" SELECT count(id_contenido) as cantidad, 'p_contenido' as tabla
                                     FROM p_contenido
                                     WHERE id_seccion = '{$id_seccion}'
 
@@ -186,12 +180,6 @@ class Seccion_model extends CI_Model {
 
                                     SELECT count(id_documento) as cantidad, 'p_documento' as tabla
                                     FROM p_documento
-                                    WHERE id_seccion = '{$id_seccion}'
-
-                                    UNION ALL
-
-                                    SELECT count(id_noticia) as cantidad, 'p_noticia' as tabla
-                                    FROM p_noticia
                                     WHERE id_seccion = '{$id_seccion}'
 
                                     UNION ALL

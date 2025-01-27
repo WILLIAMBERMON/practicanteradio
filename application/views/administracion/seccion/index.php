@@ -28,9 +28,11 @@
                     <td>
                         <strong>Editar</strong>
                     </td>
+                    <!--
                     <td>
                         <strong>Eliminar</strong>
                     </td>
+                    -->
                 </tr>
             </thead>
             <?php foreach ($secciones as $seccion): ?>
@@ -65,20 +67,15 @@
                     <i class="fa fa-pencil-square-o"></i></button>
                     <?php echo form_close(); ?>
                 </td>
+                <!--
                 <td>
-                    <?php //echo form_open(site_url('administracion/borrar_seccion'), ['class' => '', 'id' => 'form', 'role' => 'form'], ['id_seccion' => $seccion->id_seccion]); ?>
-                    <!--
-                    <a style="padding: 0px;" class="btn btn-link btn-lg hvr-grow" data-toggle="modal"
-                        data-target="#myModalBorrarDocumento<?php //echo $seccion->id_seccion;?>">
-                    <i class="fa fa-trash"></i>
-                    </a>
-                    -->
                     <a style="padding: 0px;" class="btn btn-link btn-lg hvr-grow" 
                         onclick="validar_seccion('<?php echo $seccion->id_seccion;?>')">
                     <i class="fa fa-trash"></i>
                     </a>
                     <?php //echo form_close(); ?>
                 </td>
+                -->
             </tr>
             <?php endforeach; ?>
         </table>

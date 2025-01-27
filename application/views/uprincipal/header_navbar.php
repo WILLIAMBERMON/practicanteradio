@@ -48,6 +48,7 @@
                     </form>
                 </div>
             </div>
+            <!--
             <div class="container">
                 <div class="row">
                     <div class="col-sm-8 col-xs-8">
@@ -58,7 +59,7 @@
                             <li><a href="/universidad/egresados/2225"><i class="fa fa-graduation-cap"></i> Graduados</a></li>
                             <li><a href="https://docentes.ufps.edu.co/" target="_blank"><i class="fa fa-user-secret"></i> Docentes</a></li>
                             <li><a href="https://administrativos.ufps.edu.co/" target="_blank"><i class="fa fa-briefcase"></i> Administrativos</a></li>
-                            <li><a href="<?php echo base_url("/universidad/seccion_participa_2021/2329"); ?>" target="_blank"><i class="fa fa-briefcase"></i> Participa</a></li>
+                            <li><a href="<?php //echo base_url("/universidad/seccion_participa_2021/2329"); ?>" target="_blank"><i class="fa fa-briefcase"></i> Participa</a></li>
                             <li class="cd-log_reg hidden-md hidden-lg"><strong><a class="cd-signup" href="javascript:void(0);">Lenguaje</a></strong>
                                 <ul class="topbar-dropdown">
                                     <li><a href="http://translate.google.com/translate?hl=en&sl=es&tl=en&u=ww2.ufps.edu.co">Inglés</a></li>
@@ -87,16 +88,12 @@
                                 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
                             </li>
-
-                            <!--   <li class="cd-log_reg home">
-                                <a href="http://www.ufps.edu.co/ufps/antigua.php"><i class="fa fa-reply"></i> Versión Anterior</a>
-                            </li>  -->
-                            <!--    <li class="cd-log_reg"><a class="cd-signup" href="javascript:void(0);">Register</a></li>  -->
                         </ul>
                     </div>
                 </div>
-                <!--/end row-->
+                
             </div>
+            -->
             <!--/end container-->
         </div>
         <!-- End Topbar blog -->
@@ -142,13 +139,16 @@
 
     <!-- Navbar -->
     <!-- Collect the nav links, forms, and other content for toggling -->
+    <!-- Si esta en entorno desarrollo cambia el encabezado que se encuentra almacenado en la base de datos
+         por el del localhost con el que se esté trabajando (segun el puerto que se este usando, para este caso el 10006 )-->
+
+    <!--    
     <div class="collapse navbar-collapse mega-menu navbar-responsive-collapse">
         <div class="container">
-            <!-- Si esta en entorno desarrollo cambia el encabezado que se encuentra almacenado en la base de datos
-                 por el del localhost con el que se esté trabajando (segun el puerto que se este usando, para este caso el 10006 )-->
-            <?php if(ENVIRONMENT == 'development') { echo str_replace("https://ww2.ufps.edu.co/","http://localhost:".$_SERVER['SERVER_PORT']."/", $menuprincipal->desc_contenido); }else{ echo $menuprincipal->desc_contenido;} ?>
+            <?php //if(ENVIRONMENT == 'development') { echo str_replace("https://ww2.ufps.edu.co/","http://localhost:".$_SERVER['SERVER_PORT']."/", $menuprincipal->desc_contenido); }else{ echo $menuprincipal->desc_contenido;} ?>
         </div>
     </div>
+    -->
     <!--/navbar-collapse-->
 
     <!-- End Navbar -->

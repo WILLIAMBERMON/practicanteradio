@@ -100,7 +100,7 @@ class Administracion extends CMS_Controller
         }
         if ($usuario->rol == 'radio') {
             //$this->session->set_userdata('id_seccion', 122);
-            redirect("administracion/seccion");
+            redirect("administracion/getColectivosRadiales");
         }
 
     }
@@ -2936,7 +2936,7 @@ public function getColectivosRadiales()
     $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
 
     $this->template->set('colectivos', $colectivos );
-    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->set('item_sidebar_active', 'getColectivosRadiales');
 
     $this->template->render('administracion/admin_radio/colectivos/index_colectivos');
 }
@@ -2952,7 +2952,7 @@ public function categorias_colectivo ($crear=false) {
     $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
     $this->template->add_js("plugins/datatables/js/main");
     $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
-    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->set('item_sidebar_active', 'getColectivosRadiales');
     $this->load->helper('form');
 
     $this->load->model('Colectivosradiales_model'); 
@@ -2962,6 +2962,7 @@ public function categorias_colectivo ($crear=false) {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('nombre', 'Nombre de la Categoria:', 'required|max_length[255]');
         if ($this->form_validation->run() == FALSE) {
+            $this->template->set_flash_message(['error' => 'Ocurrio un error al registrar la nueva categoría']);
             $this->template->render('administracion/admin_radio/colectivos/categorias_colectivo');
             
         }
@@ -3039,7 +3040,7 @@ public function crear_colectivo () {
     $this->template->set('categorias',$categorias);
 
 
-    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->set('item_sidebar_active', 'getColectivosRadiales');
 
     $this->template->render('administracion/admin_radio/colectivos/crear_colectivo');
 }
@@ -3059,17 +3060,20 @@ public function store_colectivo () {
     $this->form_validation->set_rules('descripcion', 'Descripción', 'required');
     $this->form_validation->set_rules('director', 'Presentado por:', 'max_length[255]');
 
-    if ($this->form_validation->run() == FALSE) {
+    if ($this->form_validation->run() == FALSE) 
+    {
 
         if($error_titulo = form_error('titulo'))
-        echo "El título tiene el siguiente error: " . $error_titulo;
+            $this->template->set_flash_message(['error' => 'El título tiene el siguiente error: '. $error_titulo]);
 
-        if($error_descripcion = form_error('descripcion'))
-        echo "La descripción tiene el siguiente error: " . $error_descripcion;
+        else if($error_descripcion = form_error('descripcion'))
+            $this->template->set_flash_message(['error' => 'La descripción tiene el siguiente error:: '. $error_titulo]);
 
-
-        if($error_director = form_error('director'))
-        echo "El director tiene el siguiente error: " . $error_director;
+        else if($error_director = form_error('director'))
+            $this->template->set_flash_message(['error' => 'El director tiene el siguiente error:: '. $error_titulo]);
+        
+        redirect('administracion/crear_colectivo');
+        
     }
     else {
         $data = array(
@@ -3099,11 +3103,17 @@ public function store_colectivo () {
             // Mostrar el mensaje de error
             $dataupload = $this->upload->data();
 
+            /*
             foreach ($dataupload as $clave => $valor) {
                 echo "$clave: $valor<br>";
             }
+            */
+
+            $this->template->set_flash_message(['error' => 'Ocurrió un error al subir la imagen: ']);
+            redirect('administracion/crear_colectivo');
+
             
-            echo $error['error'];
+            //echo $error['error'];
         } else {
 
             $data['foto'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
@@ -3162,7 +3172,7 @@ public function editar_colectivo_vista ($id){
         $this->template->set('data_colectivos', $colectivo );
 
 
-        $this->template->set('item_sidebar_active', 'administrar_secciones');
+        $this->template->set('item_sidebar_active', 'getColectivosRadiales');
 
         $this->template->render('administracion/admin_radio/colectivos/editar_colectivo');
     }
@@ -3188,13 +3198,17 @@ public function editar_colectivo_update ($id) {
         $this->form_validation->set_rules('descripcion', 'Descripción', 'required');
         $this->form_validation->set_rules('director', 'Director', 'max_length[255]');
 
-        if ($this->form_validation->run() == FALSE) {
+        if ($this->form_validation->run() == FALSE) 
+        {
             if($error_titulo = form_error('titulo'))
-            echo "El título tiene el siguiente error: " . $error_titulo;
-            if($error_descripcion = form_error('descripcion'))
-            echo "La descripción tiene el siguiente error: " . $error_descripcion;
-            if($error_director = form_error('director'))
-            echo "El director tiene el siguiente error: " . $error_director;
+                $this->template->set_flash_message(['error' => 'El título tiene el siguiente error: '.$error_titulo]);
+            else if($error_descripcion = form_error('descripcion'))
+                $this->template->set_flash_message(['error' => 'La descripción tiene el siguiente error: '.$error_descripcion]);
+            else if($error_director = form_error('director'))
+                $this->template->set_flash_message(['error' => 'El director tiene el siguiente error: '.$error_director]);
+
+            $this->template->render('administracion/editar_colectivo_vista/1');
+
         }
         else {
                 $data = array(
@@ -3224,7 +3238,9 @@ public function editar_colectivo_update ($id) {
             } else {
                 if(!$this->upload->do_upload('foto')){
                     $error= array('error' => $this->upload->display_errors());
-                    echo $error['error'];
+                    //echo $error['error'];
+                    $this->template->set_flash_message(['error' => 'El director tiene el siguiente error: '.$error['error']]);
+                    $this->template->render('administracion/editar_colectivo_vista/1');
 
                 }
                 else{
@@ -3280,7 +3296,7 @@ public function get_programacion_radio()
 
     $this->template->set('colectivos', $colectivos_array );
     $this->template->set('programacion', $programacion );
-    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->set('item_sidebar_active', 'get_programacion_radio');
 
     $this->template->render('administracion/admin_radio/programacion/index_programacion');
 }
@@ -3315,7 +3331,7 @@ public function crear_programacion_radio () {
     $this->template->set('colectivos',$colectivos_array);
     $this->template->set('dias',$dias);
 
-    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->set('item_sidebar_active', 'get_programacion_radio');
 
     $this->template->render('administracion/admin_radio/programacion/crear_programacion');
 }
@@ -3335,20 +3351,23 @@ public function store_programacion_radio () {
             $this->form_validation->set_rules('hora_fin', 'Hora de Fin:', 'required');
             $this->form_validation->set_rules('dia_transmicion', 'Dias:', 'required|max_length[50]');
     
-            if ($this->form_validation->run() == FALSE) {
+            if ($this->form_validation->run() == FALSE) 
+            {
 
                 if($error_colectivo = form_error('colectivo'))
-                echo " " . $error_colectivo;
-                
-                if($error_hora_inicio = form_error('hora_inicio'))
-                echo " " . $error_hora_inicio;
+                    $this->template->set_flash_message(['error' => 'Error: '.$error_colectivo]);
+
+                else if($error_hora_inicio = form_error('hora_inicio'))
+                    $this->template->set_flash_message(['error' => 'Error: '.$error_hora_inicio]);
+
+                else if($error_hora_fin = form_error('hora_fin'))
+                    $this->template->set_flash_message(['error' => 'Error: '.$error_hora_fin]);
     
-                if($error_hora_fin = form_error('hora_fin'))
-                echo " " . $error_hora_fin;
-    
-    
-                if($error_dia_transmicion = form_error('dia_transmicion'))
-                echo " " . $error_dia_transmicion;
+                else if($error_dia_transmicion = form_error('dia_transmicion'))
+                    $this->template->set_flash_message(['error' => 'Error: '.$error_dia_transmicion]);
+
+                redirect('administracion/get_programacion_radio');
+
             }
             else {
                 $data = array(
@@ -3415,7 +3434,7 @@ public function editar_programacion_radio ($id) {
     $this->template->set('programacion',$programacion);
     $this->template->set('dias',$dias);
 
-    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->set('item_sidebar_active', 'get_programacion_radio');
 
     $this->template->render('administracion/admin_radio/programacion/editar_programacion');
 }
@@ -3439,17 +3458,18 @@ public function update_programacion_radio ($id) {
         if ($this->form_validation->run() == FALSE) {
 
             if($error_colectivo = form_error('colectivo'))
-            echo " " . $error_colectivo;
+                $this->template->set_flash_message(['error' => 'Error: '.$error_colectivo]);
             
             if($error_hora_inicio = form_error('hora_inicio'))
-            echo " " . $error_hora_inicio;
+                $this->template->set_flash_message(['error' => 'Error: '.$error_hora_inicio]);
 
             if($error_hora_fin = form_error('hora_fin'))
-            echo " " . $error_hora_fin;
-
+                $this->template->set_flash_message(['error' => 'Error: '.$error_hora_fin]);
 
             if($error_dia_transmicion = form_error('dia_transmicion'))
-            echo " " . $error_dia_transmicion;
+                $this->template->set_flash_message(['error' => 'Error: '.$error_dia_transmicion]);
+
+            redirect('administracion/get_programacion_radio');
         }
         else {
             $data = array(
@@ -3478,7 +3498,7 @@ public function imagen_principal_radio ($crear,$editar) {
     $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
     $this->template->add_js("plugins/datatables/js/main");
     $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
-    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->set('item_sidebar_active', 'imagen_principal_radio');
     $this->load->helper('form');
 
     $this->load->model('contenido_model'); 
@@ -3507,7 +3527,9 @@ public function imagen_principal_radio ($crear,$editar) {
 
                 if(!$this->upload->do_upload('foto')){
                     $error= array('error' => $this->upload->display_errors());
-                    echo $error['error'];
+                    //echo $error['error'];
+                    $this->template->set_flash_message(['error' => 'Error: '.$error['error']]);
+                    redirect('administracion/imagen_principal_radio/false/false');
                 }
                 else{
                     $data=[];
@@ -3544,7 +3566,9 @@ public function imagen_principal_radio ($crear,$editar) {
 
             if(!$this->upload->do_upload('foto')){
                 $error= array('error' => $this->upload->display_errors());
-                echo $error['error'];
+                $this->template->set_flash_message(['error' => 'Error: '.$error['error']]);
+                redirect('administracion/imagen_principal_radio/false/false');
+
             }
             else{
                 $data=[
@@ -3574,7 +3598,7 @@ public function imagen_carrusel_radio ($crear,$editar) {
     $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
     $this->template->add_js("plugins/datatables/js/main");
     $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
-    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->set('item_sidebar_active', 'imagen_carrusel_radio');
     $this->load->helper('form');
 
     $this->load->model('contenido_model'); 
@@ -3603,7 +3627,10 @@ public function imagen_carrusel_radio ($crear,$editar) {
 
                 if(!$this->upload->do_upload('foto')){
                     $error= array('error' => $this->upload->display_errors());
-                    echo $error['error'];
+                    //echo $error['error'];
+                    $this->template->set_flash_message(['error' => 'Error: '.$error['error']]);
+                    redirect('administracion/imagen_carrusel_radio/false/false');
+
                 }
                 else{
                     $data=[];
@@ -3640,7 +3667,10 @@ public function imagen_carrusel_radio ($crear,$editar) {
 
             if(!$this->upload->do_upload('foto')){
                 $error= array('error' => $this->upload->display_errors());
-                echo $error['error'];
+                //echo $error['error'];
+                $this->template->set_flash_message(['error' => 'Error: '.$error['error']]);
+                redirect('administracion/imagen_carrusel_radio/false/false');
+
             }
             else{
                 $data=[
@@ -3688,7 +3718,7 @@ public function equipo_ufps_radio_index()
     $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
 
     $this->template->set('equipo_radio', $equipo_radio );
-    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->set('item_sidebar_active', 'equipo_ufps_radio_index');
 
     $this->template->render('administracion/admin_radio/equipo_ufps_radio/index_equipo_radio');
 }
@@ -3727,7 +3757,7 @@ public function equipo_ufps_radio_formulario($funcion){
     $this->template->add_js("plugins/datatables/js/main");
     $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
 
-    $this->template->set('item_sidebar_active', 'administrar_secciones');
+    $this->template->set('item_sidebar_active', 'equipo_ufps_radio_index');
     $this->template->render('administracion/admin_radio/equipo_ufps_radio/equipo_radio_formulario');
 }
 
@@ -3787,7 +3817,10 @@ public function equipo_ufps_radio_editar_crear () {
                 } else {
                     if(!$this->upload->do_upload('foto')){
                         $error= array('error' => $this->upload->display_errors());
-                        echo $error['error'];
+                        //echo $error['error'];
+                        $this->template->set_flash_message(['error' => 'Error: '.$error['error']]);
+                        redirect('administracion/equipo_ufps_radio_index');
+
                     }
                     else{
                         $data['foto'] = $this->upload->data('file_name'); // Guardar el nombre del archivo 
@@ -3828,7 +3861,9 @@ public function equipo_ufps_radio_editar_crear () {
                     $error = array('error' => $this->upload->display_errors());
                     // Mostrar el mensaje de error
                     $dataupload = $this->upload->data();
-                    echo $error['error'];
+                    //echo $error['error'];
+                    $this->template->set_flash_message(['error' => 'Error: '.$error['error']]);
+                    redirect('administracion/equipo_ufps_radio_index');
         
                 }else{
                     $data['foto'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
@@ -3899,7 +3934,7 @@ public function documentos_integrate_radio_index (){
             $this->template->add_js("plugins/datatables/js/jquery.dataTables.min");
             $this->template->add_js("plugins/datatables/js/main");
             $this->template->add_css("plugins/datatables/css/dataTables.bootstrap.min");
-            $this->template->set('item_sidebar_active', 'administrar_secciones');
+            $this->template->set('item_sidebar_active', 'documentos_integrate_radio_index');
             $this->load->helper('form');
 
             $this->load->model('contenido_model'); 
@@ -3979,7 +4014,10 @@ public function documentos_integrate_radio ($nombre) {
                     $contenido = $this->contenido_model->get_contenido($array_id["pdf_creacion_colectivos_radiales"]); 
                     if(!$this->upload->do_upload('documento')){
                         $error= array('error' => $this->upload->display_errors());
-                        echo $error['error'];
+                        //echo $error['error'];
+                        $this->template->set_flash_message(['error' => 'Error: '.$error['error']]);
+                        redirect('administracion/documentos_integrate_radio_index');       
+
                     }else{
                     $data=[];
                     $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
@@ -4002,7 +4040,10 @@ public function documentos_integrate_radio ($nombre) {
                 $contenido = $this->contenido_model->get_contenido($array_id["estilo_rruc_radio"]);
                 if(!$this->upload->do_upload('documento')){
                     $error= array('error' => $this->upload->display_errors());
-                    echo $error['error'];
+                    //echo $error['error'];
+                    $this->template->set_flash_message(['error' => 'Error: '.$error['error']]);
+                    redirect('administracion/documentos_integrate_radio_index');       
+
                 }else{
                     $data=[];
                     $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo
@@ -4024,7 +4065,10 @@ public function documentos_integrate_radio ($nombre) {
                 $contenido = $this->contenido_model->get_contenido($array_id["etica_estilo_ufps_radio"]);
                 if(!$this->upload->do_upload('documento')){
                     $error= array('error' => $this->upload->display_errors());
-                    echo $error['error'];
+                    //echo $error['error'];
+                    $this->template->set_flash_message(['error' => 'Error: '.$error['error']]);
+                    redirect('administracion/documentos_integrate_radio_index');       
+
                 }else{
                     $data=[];
                     $data['desc_contenido'] = $this->upload->data('file_name'); // Guardar el nombre del archivo

@@ -28,32 +28,32 @@
                     </li>
                     <?php endif; ?>
                     <?php if ($userdata->rol == 'admin' || $userdata->rol == 'radio'): ?>
-                    <li class="<?= ($item_sidebar_active == 'administrar_secciones') ? 'active' : ''; ?>">
+                    <li class="<?= ($item_sidebar_active == 'getColectivosRadiales') ? 'active' : ''; ?>">
                         <a href="<?= site_url('administracion/getColectivosRadiales'); ?>">
                             Administrar Colectivos
                         </a>
                     </li>
-                    <li class="<?= ($item_sidebar_active == 'administrar_secciones') ? 'active' : ''; ?>">
+                    <li class="<?= ($item_sidebar_active == 'get_programacion_radio') ? 'active' : ''; ?>">
                         <a href="<?= site_url('administracion/get_programacion_radio'); ?>">
                             Administrar Programacion
                         </a>
                     </li>
-                    <li class="<?= ($item_sidebar_active == 'administrar_secciones') ? 'active' : ''; ?>">
+                    <li class="<?= ($item_sidebar_active == 'imagen_principal_radio') ? 'active' : ''; ?>">
                         <a href="<?= site_url('administracion/imagen_principal_radio/false/false'); ?>">
                             Administrar imagen principal
                         </a>
                     </li>
-                    <li class="<?= ($item_sidebar_active == 'administrar_secciones') ? 'active' : ''; ?>">
+                    <li class="<?= ($item_sidebar_active == 'imagen_carrusel_radio') ? 'active' : ''; ?>">
                         <a href="<?= site_url('administracion/imagen_carrusel_radio/false/false'); ?>">
                             Administrar imagen carrusel
                         </a>
                     </li>
-                    <li class="<?= ($item_sidebar_active == 'administrar_secciones') ? 'active' : ''; ?>">
+                    <li class="<?= ($item_sidebar_active == 'equipo_ufps_radio_index') ? 'active' : ''; ?>">
                         <a href="<?= site_url('administracion/equipo_ufps_radio_index'); ?>">
                             Administrar Equipo UFPS Radio
                         </a>
                     </li>
-                    <li class="<?= ($item_sidebar_active == 'administrar_secciones') ? 'active' : ''; ?>">
+                    <li class="<?= ($item_sidebar_active == 'documentos_integrate_radio_index') ? 'active' : ''; ?>">
                         <a href="<?= site_url('administracion/documentos_integrate_radio_index'); ?>">
                             Administrar Documentos Radio
                         </a>
@@ -129,11 +129,6 @@
                         Administrar Procesos Contractuales
                     </a>
                 </li>
-                    <li class="<?= ($item_sidebar_active == 'administrar_secciones') ? 'active' : ''; ?>">
-                        <a href="<?= site_url('administracion/documento_contenido_titulo'); ?>">
-                            Administrar Documentos Contratación
-                        </a>
-                    </li>
                 <?php endif; ?>
                     <li>
                         <a class="text-danger" href="<?= site_url('administracion/logout'); ?>">
