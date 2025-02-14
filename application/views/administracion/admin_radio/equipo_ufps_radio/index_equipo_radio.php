@@ -6,11 +6,11 @@
         <table id="table_equipo" class="table table-striped table-hover table-bordered text-center" style="width: 100%;">
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Cargo</th>
-                    <th>Departamento</th>
-                    <th>Imagen</th>
-                    <th>Acciones</th>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Cargo</th>
+                    <th class="text-center">Correo</th>
+                    <th class="text-center">Imagen</th>
+                    <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -19,7 +19,7 @@
                 <tr>
                     <td style="max-width: 300px; word-wrap: break-word; overflow: hidden; text-overflow: ellipsis;"><?php echo $integrante["nombre"]; ?></td>
                     <td><?php echo $integrante["cargo"]; ?></td>
-                    <td><?php echo $integrante["departamento"]; ?></td>
+                    <td><?php echo $integrante["correo"]; ?></td>
                     <td><img src="<?php echo base_url("public/imagenes/radio/equipo_radio/" . $integrante["foto"]); ?>" alt="Foto del colectivo" style="width: 100px;"></td>
                     <td>
                         <a href="<?php echo site_url('administracion/equipo_ufps_radio_formulario/'. $integrante["id"]); ?>" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i> Editar</a>

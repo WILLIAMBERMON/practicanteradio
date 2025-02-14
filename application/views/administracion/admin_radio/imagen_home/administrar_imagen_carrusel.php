@@ -6,7 +6,7 @@
         <?php echo form_open_multipart(base_url('administracion/imagen_carrusel_radio/true/false')); ?>
         <div class="form-group">
             <?php echo form_label('Foto carrusel del home:', 'foto',''); ?>
-            <?php echo form_upload('foto',"",'class="form-control"'); ?>
+            <?php echo form_upload('foto', '', 'class="form-control" accept="image/jpeg,image/jpg,image/png,image/gif" required="true"'); ?>
         </div>
         <!-- Mensaje de información estilizado -->
         <div class="alert alert-info" style="margin-top: 10px; padding: 10px; border-left: 4px solid #17a2b8; border-radius: 4px;">
@@ -44,7 +44,8 @@
                         <?php echo form_open_multipart(base_url('administracion/imagen_carrusel_radio/false/true')); ?>
                         <div class="form-group">
                             <?php echo form_label('Foto principal del home:', 'foto',''); ?>
-                            <?php echo form_upload('foto',"",'class="form-control"'); ?>
+                            <?php echo form_upload('foto', '', 'class="form-control" accept="image/jpeg,image/jpg,image/png,image/gif" required="true"'); ?>
+
                         </div>
                         <!-- Mensaje de información estilizado -->
                         <div class="alert alert-info" style="margin-top: 10px; padding: 10px; border-left: 4px solid #17a2b8; border-radius: 4px;">
@@ -52,7 +53,7 @@
                             <strong>Requisitos para la imagen:</strong>
                             <ul style="margin: 5px 0 0 15px; padding: 0;">
                                 <li>El sistema admite archivos en formato <strong>GIF, JPG o PNG</strong>.</li>
-                                <li>El tamaño máximo de la imagen es de <strong>1024 KB</strong>.</li>
+                                <li>El tamaño máximo de la imagen es de <strong>4 Megabytes</strong>.</li>
                                 <li>La imagen no debe superar las dimensiones de <strong>1500px de ancho por 450px de alto</strong>.</li>
                             </ul>
                         </div>
@@ -74,7 +75,7 @@
     $(document).ready(function() {
         // Validaciones para la imagen principal
         const validFormats = ['image/jpeg', 'image/png', 'image/gif'];
-        const maxFileSize = 1024 * 1024; // 1024 KB en bytes
+        const maxFileSize = 4 * 1024 * 1024; // 4MB en bytes
         const maxWidth = 1500;
         const maxHeight = 450;
     
@@ -97,7 +98,7 @@
     
                 // Validar tamaño del archivo
                 if (file.size > maxFileSize) {
-                    errorMessage.text('El tamaño del archivo no debe superar 1024 KB.');
+                    errorMessage.text('El tamaño del archivo no debe superar 4 Megabytes.');
                     errorMessage.removeClass('hidden');
                     fileInput.val(''); // Limpiar el campo
                     return;

@@ -29,7 +29,7 @@
                     <td style="width: 20%;">
                         <?php echo form_open_multipart(base_url('administracion/documentos_integrate_radio/pdf_creacion_colectivos_radiales'), ['onsubmit' => 'return validateFileInput(this)']); ?>
                         <div class="form-group">
-                            <?php echo form_upload('documento', "", 'class="form-control" required'); ?>
+                            <?php echo form_upload('documento', '', 'class="form-control" accept="application/pdf" required'); ?>
                         </div>
                         <?php echo form_submit('submit', 'Actualizar PDF', 'class="btn btn-primary"'); ?>
                         <?php echo form_close(); ?>
@@ -49,7 +49,7 @@
                     <td style="width: 20%;">
                         <?php echo form_open_multipart(base_url('administracion/documentos_integrate_radio/estilo_rruc_radio'), ['onsubmit' => 'return validateFileInput(this)']); ?>
                         <div class="form-group">
-                            <?php echo form_upload('documento', "", 'class="form-control" required'); ?>
+                            <?php echo form_upload('documento', '', 'class="form-control" accept="application/pdf" required'); ?>
                         </div>
                         <?php echo form_submit('submit', 'Actualizar PDF', 'class="btn btn-primary"'); ?>
                         <?php echo form_close(); ?>
@@ -69,7 +69,7 @@
                     <td style="width: 20%;">
                         <?php echo form_open_multipart(base_url('administracion/documentos_integrate_radio/etica_estilo_ufps_radio'), ['onsubmit' => 'return validateFileInput(this)']); ?>
                         <div class="form-group">
-                            <?php echo form_upload('documento', "", 'class="form-control" required'); ?>
+                            <?php echo form_upload('documento', '', 'class="form-control" accept="application/pdf" required'); ?>
                         </div>
                         <?php echo form_submit('submit', 'Actualizar PDF', 'class="btn btn-primary"'); ?>
                         <?php echo form_close(); ?>

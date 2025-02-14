@@ -52,7 +52,9 @@
                 <?php echo form_upload([
                     'name' => 'foto',
                     'id' => 'foto',
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'accept' => 'image/jpeg,image/jpg,image/png,image/gif"',
+                    'required' => true
                 ]); ?>
 
                 <!-- Información sobre la foto -->
@@ -61,8 +63,8 @@
                     <strong>Requisitos para la imagen:</strong>
                     <ul style="margin: 5px 0 0 15px;">
                         <li>Formatos permitidos: <strong>GIF, JPG o PNG</strong>.</li>
-                        <li>Tamaño máximo: <strong>1024 KB</strong>.</li>
-                        <li>Dimensiones máximas: <strong>800px de ancho y 500px de alto</strong>.</li>
+                        <li>Tamaño máximo: <strong>4 Megabytes</strong>.</li>
+                        <li>Dimensiones máximas: <strong>1080px de ancho y 1350px de alto</strong>.</li>
                     </ul>
                 </div>
                 <div id="foto-error" class="alert alert-danger hidden" style="margin-top: 10px;">
@@ -125,9 +127,9 @@
 
         if (file) {
             const validFormats = ['image/jpeg', 'image/png', 'image/gif'];
-            const maxFileSize = 1024 * 1024; // 1024 KB
-            const maxWidth = 800;
-            const maxHeight = 500;
+            const maxFileSize = 4 * 1024 * 1024; // 4MB en bytes
+            const maxWidth = 1080;
+            const maxHeight = 1350;
 
             if (!validFormats.includes(file.type)) {
                 errorMessage.textContent = 'Solo se permiten archivos en formato GIF, JPG o PNG.';
@@ -137,7 +139,7 @@
             }
 
             if (file.size > maxFileSize) {
-                errorMessage.textContent = 'El tamaño del archivo no debe superar 1024 KB.';
+                errorMessage.textContent = 'El tamaño del archivo no debe superar 4 Megabytes.';
                 errorMessage.classList.remove('hidden');
                 fileInput.value = '';
                 return;
@@ -148,19 +150,12 @@
 
             img.onload = function () {
                 if (img.width > maxWidth || img.height > maxHeight) {
-                    errorMessage.textContent = 'La imagen no debe superar 800px de ancho y 500px de alto.';
+                    errorMessage.textContent = 'La imagen no debe superar 1080px de ancho y 1350px de alto.';
                     errorMessage.classList.remove('hidden');
                     fileInput.value = '';
                 }
                 URL.revokeObjectURL(img.src);
             };
-        }
-    });
-
-    document.getElementById('editarColectivoForm').addEventListener('submit', function (e) {
-        if (!document.getElementById('foto').value) {
-            // Permite que la imagen sea opcional si no se selecciona una nueva
-            //console.log('Sin imagen seleccionada, continúa...');
         }
     });
 </script>

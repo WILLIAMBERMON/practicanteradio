@@ -46,6 +46,7 @@
                     'name' => 'foto',
                     'id' => 'foto',
                     'class' => 'form-control',
+                    'accept' => 'image/jpeg,image/jpg,image/png,image/gif"',
                     'required' => true
                 ]); ?>
                 <span class="help-block hidden">Por favor, sube una foto válida.</span>
@@ -56,8 +57,8 @@
                     <strong>Requisitos para la imagen:</strong>
                     <ul style="margin: 5px 0 0 15px; padding: 0;">
                         <li>El sistema admite archivos en formato <strong>GIF, JPG o PNG</strong>.</li>
-                        <li>El tamaño máximo de la imagen es de <strong>1024 KB</strong>.</li>
-                        <li>La imagen no debe superar las dimensiones de <strong>800px de ancho por 500px de alto</strong>.</li>
+                        <li>El tamaño máximo de la imagen es de <strong>4 Megabytes</strong>.</li>
+                        <li>La imagen no debe superar las dimensiones de <strong>1080px de ancho por 1350px de alto</strong>.</li>
                     </ul>
                 </div>
 
@@ -113,55 +114,56 @@
 </div>
 
 <script>
-    document.getElementById('foto').addEventListener('change', function () {
-        const fileInput = this;
-        const file = fileInput.files[0];
-        const errorMessage = document.getElementById('foto-error');
-        errorMessage.classList.add('hidden'); // Ocultar mensaje de error inicialmente
+document.getElementById('foto').addEventListener('change', function () {
+    const fileInput = this;
+    const file = fileInput.files[0];
+    const errorMessage = document.getElementById('foto-error');
+    errorMessage.classList.add('hidden'); // Ocultar mensaje de error inicialmente
 
-        // Validación del archivo
-        if (file) {
-            const validFormats = ['image/jpeg', 'image/png', 'image/gif'];
-            const maxFileSize = 1024 * 1024; // 1024 KB en bytes
-            const maxWidth = 800;
-            const maxHeight = 500;
+    // Validación del archivo
+    if (file) {
+        const validFormats = ['image/jpeg', 'image/png', 'image/gif'];
+        const maxFileSize = 4 * 1024 * 1024; // 4MB en bytes
+        const maxWidth = 1080;
+        const maxHeight = 1350;
 
-            // Validar formato
-            if (!validFormats.includes(file.type)) {
-                errorMessage.textContent = 'Solo se permiten archivos en formato GIF, JPG o PNG.';
+        // Validar formato
+        if (!validFormats.includes(file.type)) {
+            errorMessage.textContent = 'Solo se permiten archivos en formato GIF, JPG o PNG.';
+            errorMessage.classList.remove('hidden');
+            fileInput.value = ''; // Limpia el campo
+            return;
+        }
+
+        // Validar tamaño del archivo
+        if (file.size > maxFileSize) {
+            errorMessage.textContent = 'El tamaño del archivo no debe superar 4 Megabytes.';
+            errorMessage.classList.remove('hidden');
+            fileInput.value = ''; // Limpia el campo
+            return;
+        }
+
+        // Validar dimensiones de la imagen
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+
+        img.onload = function () {
+            if (img.width > maxWidth || img.height > maxHeight) {
+                errorMessage.textContent = 'La imagen no debe superar 1080px de ancho por 1350px de alto.';
                 errorMessage.classList.remove('hidden');
                 fileInput.value = ''; // Limpia el campo
-                return;
             }
+            URL.revokeObjectURL(img.src); // Liberar memoria
+        };
+    }
+});
 
-            // Validar tamaño del archivo
-            if (file.size > maxFileSize) {
-                errorMessage.textContent = 'El tamaño del archivo no debe superar 1024 KB.';
-                errorMessage.classList.remove('hidden');
-                fileInput.value = ''; // Limpia el campo
-                return;
-            }
+// Validación del formulario en general
+document.getElementById('crearColectivoForm').addEventListener('submit', function (e) {
+    if (!document.getElementById('foto').value) {
+        e.preventDefault(); // Evitar envío si no cumple requisitos
+        alert('Por favor, sube una imagen válida.');
+    }
+});
 
-            // Validar dimensiones de la imagen
-            const img = new Image();
-            img.src = URL.createObjectURL(file);
-
-            img.onload = function () {
-                if (img.width > maxWidth || img.height > maxHeight) {
-                    errorMessage.textContent = 'La imagen no debe superar 800px de ancho por 500px de alto.';
-                    errorMessage.classList.remove('hidden');
-                    fileInput.value = ''; // Limpia el campo
-                }
-                URL.revokeObjectURL(img.src); // Liberar memoria
-            };
-        }
-    });
-
-    // Validación del formulario en general
-    document.getElementById('crearColectivoForm').addEventListener('submit', function (e) {
-        if (!document.getElementById('foto').value) {
-            e.preventDefault(); // Evitar envío si no cumple requisitos
-            alert('Por favor, sube una imagen válida.');
-        }
-    });
 </script>

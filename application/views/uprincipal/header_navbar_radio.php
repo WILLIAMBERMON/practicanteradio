@@ -396,13 +396,13 @@
 
                 ?>
                 <?php if(isset($pdf1)): ?>
-                    <li><a href="<?php echo base_url("public/archivos/pdf_radio/" . $pdf1 ); ?>" target="_blank">Instructivo Creación Colectivos Radiales</a></li>
+                    <li><a href="/radiocontenido/integrate-ufps/1">Instructivo Creación Colectivos Radiales</a></li>
                 <?php endif; ?> 
                 <?php if(isset($pdf2)): ?>           
-                    <li><a href="<?php echo base_url("public/archivos/pdf_radio/" . $pdf2 ); ?>" target="_blank">Manual de estilo RRUC</a></li>
+                    <li><a href="/radiocontenido/integrate-ufps/2">Manual de estilo RRUC</a></li>
                 <?php endif; ?>    
                 <?php if(isset($pdf3)): ?>        
-                    <li><a href="<?php echo base_url("public/archivos/pdf_radio/" . $pdf3 ); ?>" target="_blank">Manual de ética y estilo UFPS Radio</a></li>
+                    <li><a href="/radiocontenido/integrate-ufps/3">Manual de ética y estilo UFPS Radio</a></li>
                 <?php endif; ?>            
                 </ul>
             </li>

@@ -303,11 +303,20 @@ class Radiocontenido extends CMS_Controller
 
     public function institucion($idnom = null, $idcont = null, $iddoc = null)
     {
-        if($idnom == "colectivos-radiales-ufps-radio"){
+        if($idnom == "colectivos-radiales-ufps-radio")
+        {
             redirect("radiocontenido/colectivos_radiales");
-        }elseif ($idnom == "programacion-ufps-radio") {
+        }
+        elseif ($idnom == "programacion-ufps-radio") 
+        {
             redirect("radiocontenido/programacion_radio");
-        } else{
+        } 
+        elseif ($idnom == "integrate-ufps") 
+        {
+            //redirect("radiocontenido/integrate_ufps/".$idcont);
+            $this->integrate_ufps($idcont);
+        } 
+        else{
             $this->template->add_js('js/views/custom/elevatezoom.min');
             $this->template->add_js('js/elevatezoom/jquery.elevatezoom.min');
           //  $this->template->add_js('js/responsiveimagenmap/jquery.rwdImageMaps');
@@ -396,6 +405,39 @@ class Radiocontenido extends CMS_Controller
         $this->template->set('categorias',$categorias);
         $this->template->set('colectivos', $colectivos );
         $this->template->render('radio_ufps/view_colectivos');
+
+    }
+
+    
+    /*
+        Menú donde lista los documentos de la Radio, el parámetro id_doc puede tener los siguientes valores:
+        1. Instructivo Creación Colectivos Radiales
+        2. Manual de estilo RRUC
+        3. Manual de ética y estilo UFPS Radio
+    */
+    public function integrate_ufps($id_doc)
+    {
+
+        $this->load->model('contenido_model');     
+
+        $contenidos = $this->contenido_model->get_all_contenido(195);
+        $array_contenido=[];
+        foreach ($contenidos as $contenido) {
+            $array_contenido[$contenido->nombre_contenido]=  $contenido->desc_contenido ;
+        }
+
+
+        $categorias = $this->Colectivosradiales_model->obtener_categorias();
+        $colectivos = [];
+        foreach($categorias as $key => $value){
+            $colectivos[$key]=$this->Colectivosradiales_model->get_colectivo_categoria($key);
+        }
+
+        $this->template->set('categorias',$categorias);
+        $this->template->set('colectivos', $colectivos );
+        $this->template->set('id_doc',$id_doc);
+        $this->template->set('array_contenido', $array_contenido);
+        $this->template->render('radio_ufps/view_instructivo_creacion_colectivos');
 
     }
 

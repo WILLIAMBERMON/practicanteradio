@@ -154,63 +154,120 @@
                 justify-content: center; 
                 margin-top:20px;
             }
+
+
+.card {
+        padding: 20px 25px; /* Aumentamos el padding superior e inferior */
+        margin-bottom: 15px; /* Separación entre las tarjetas */
+        border-radius: 15px; /* Bordes redondeados más estilizados */
+    }
+
+    .card .centrado {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 0; /* Añadimos padding arriba y abajo */
+    }
+
+    .card-img-top {
+        border-radius: 50%;
+        width: 100px; /* Ajuste de tamaño */
+        height: 100px;
+        object-fit: cover;
+        margin-top: 10px; /* Espacio arriba */
+        margin-bottom: 10px; /* Espacio abajo */
+    }
+
+    .opaco {
+        filter: grayscale(80%) opacity(0.6);
+        transition: 0.3s;
+    }
+    .opaco:hover {
+        filter: grayscale(50%) opacity(0.8);
+    }
 </style>
 
 <div class="container custom-container">
     <h2 class="text-center custom-title">Programacion</h2>
     <div class="text-center ">
         <ul class="nav nav-tabs ul-responsivo">
-            <?php $isFirst = true; // Variable para identificar la primera iteración
-                foreach ($dias as $dia): ?>
-                    <li class="<?php echo $isFirst ? 'active' : ''; ?>" style="margin-top:10px;">
-                        <a data-toggle="tab" href="#programacion<?php echo $dia; ?>"><?php echo $dia; ?></a>
-                    </li>
-                <?php $isFirst = false; // Cambiar a false después de la primera iteración ?>
+            <?php 
+            $hoy = date('l'); // Obtiene el día actual en inglés (Monday, Tuesday, etc.)
+            $dias_traducidos = array(
+                'Monday'    => 'Lunes',
+                'Tuesday'   => 'Martes',
+                'Wednesday' => 'Miercoles',
+                'Thursday'  => 'Jueves',
+                'Friday'    => 'Viernes',
+                'Saturday'  => 'Sabado',
+                'Sunday'    => 'Domingo'
+            );
+            
+            // Verificar si el día existe en el array, si no, usar "Lunes" como valor por defecto
+            $dia_actual = isset($dias_traducidos[$hoy]) ? $dias_traducidos[$hoy] : 'Lunes';
+
+            foreach ($dias as $dia): ?>
+                <li class="<?php echo ($dia == $dia_actual) ? 'active' : ''; ?>" style="margin-top:10px;">
+                    <a data-toggle="tab" href="#programacion<?php echo $dia; ?>"><?php echo $dia; ?></a>
+                </li>
             <?php endforeach; ?>
         </ul>
     </div>
     
-   <div class="tab-content">
-       <?php $isFirst = true; foreach ($programacion as $key => $value): ?>
-            <div class="tab-pane fade <?php echo $isFirst ? "in active" : "" ?> " id="programacion<?php echo $key; ?>">
-                    
-                        <?php foreach ($value as $programacion): 
-                            $colectivo=$colectivos[$programacion->colectivo_id];?>
-                            <div class="card">
-                                <div class="row">
-                                        
-                                        <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3 centrado">
-                                            <img class="card-img-top" src="<?php echo base_url("public/imagenes/radio/colectivos/" . $colectivo->foto); ?>" alt="Imagen_programacion">
-                                        </div>
-                                        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title"><a href="<?php echo base_url("radiocontenido/colectivo_radial/" . $colectivo->id); ?>"><?php echo $colectivo->titulo; ?></a></h5>
-                                            <h4><b>
-                                             <?php 
-                                                    // Convertir hora_inicio a formato 12H
-                                                    $hora_inicio = date("g:i A", strtotime($programacion->hora_inicio));
-                                                    // Convertir hora_fin a formato 12H
-                                                    $hora_fin = date("g:i A", strtotime($programacion->hora_fin));
-                                                    
-                                                    echo $hora_inicio; ?> - <?php echo $hora_fin; ?>
-                                            </b>
-                                            </h4>
-                                            <p class="texto-truncado"><?php echo $colectivo->descripcion; ?></p>                                    
-                                        </div>
-                                        <div class="card-footer text-muted">
-                                            Presentado por: <strong><?php echo $colectivo->director; ?></strong>
-                                        </div>
-                                        </div>
+<?php 
+date_default_timezone_set('America/Bogota'); // Ajusta la zona horaria si es necesario
+$hora_actual = date("H:i"); // Formato de 24 horas (Ej: 14:30)
+?>
 
-                                </div>
+<div class="tab-content">
+    <?php foreach ($programacion as $key => $value): 
+        // Activar la pestaña si coincide con el día actual
+        $isActive = ($key == $dia_actual) ? "in active" : "";
+    ?>
+        <div class="tab-pane fade <?php echo $isActive; ?>" id="programacion<?php echo $key; ?>">
+            <?php foreach ($value as $programacion): 
+                $colectivo = $colectivos[$programacion->colectivo_id];
 
+                // Convertir hora a formato 24H para comparación
+                $hora_inicio = date("H:i", strtotime($programacion->hora_inicio));
+                $hora_fin = date("H:i", strtotime($programacion->hora_fin));
+
+                // Verificar si el programa está en vivo
+                $en_vivo = ($hora_actual >= $hora_inicio && $hora_actual <= $hora_fin);
+            ?>
+                <div class="card <?php echo !$en_vivo ? 'opaco' : ''; ?>" style="background-color: #fef2f2; border-color: #ff0000;">
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3 centrado" >
+                            <img class="card-img-top" src="<?php echo base_url("public/imagenes/radio/colectivos/" . $colectivo->foto); ?>" alt="Imagen_programacion">
+                        </div>
+                        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="<?php echo base_url("radiocontenido/colectivo_radial/" . $colectivo->id); ?>">
+                                        <?php echo $colectivo->titulo; ?>
+                                    </a>
+                                    <?php if ($en_vivo): ?>
+                                        <span class="en-vivo">🔴 En Vivo</span>
+                                    <?php endif; ?>
+                                </h5>
+                                <h4><b>
+                                    <?php 
+                                    echo date("g:i A", strtotime($programacion->hora_inicio)) . " - " . date("g:i A", strtotime($programacion->hora_fin));
+                                    ?>
+                                </b></h4>
+                                <p class="texto-truncado"><?php echo $colectivo->descripcion; ?></p>                                    
                             </div>
-                        <?php endforeach; ?>  
-            </div>
-            <?php $isFirst = false; ?>
-        <?php endforeach; ?>
-            
-    </div>
+                            <div class=" text-muted" style="background-color: #fef2f2;  border-top: solid 1px #ff0000; ">
+                                Presentado por: <strong><?php echo $colectivo->director; ?></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>  
+        </div>
+    <?php endforeach; ?>
+</div>
+
     
 </div>
 

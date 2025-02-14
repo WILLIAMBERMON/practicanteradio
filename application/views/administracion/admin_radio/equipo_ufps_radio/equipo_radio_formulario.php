@@ -16,19 +16,19 @@
                 <?php echo form_input('cargo', set_value('cargo'), 'class="form-control" placeholder="Cargo que ocupa"'); ?>
             </div>
             <div class="form-group">
-                <?php echo form_label('Departamento:', 'departamento'); ?>
-                <?php echo form_input('departamento', set_value('departamento'),'class="form-control" placeholder="Departamento al que pertenece (radio,cecom,etc)"'); ?>
+                <?php echo form_label('Correo:', 'correo'); ?>
+                <?php echo form_input('correo', set_value('correo'),'class="form-control" placeholder="Correo Electrónico"'); ?>
             </div>
             <div class="form-group">
                 <?php echo form_label('Foto:', 'foto'); ?>
-                <?php echo form_upload('foto',"",'class="form-control"'); ?>
+                <?php echo form_upload('foto', '', 'class="form-control" accept="image/jpeg,image/jpg,image/png,image/gif" required="true"'); ?>
             </div>
             <div class="alert alert-info" style="margin-top: 10px; padding: 10px; border-left: 4px solid #17a2b8; border-radius: 4px;">
                 <i class="glyphicon glyphicon-info-sign" style="margin-right: 5px; color: #17a2b8;"></i>
                 <strong>Requisitos para la imagen:</strong>
                 <ul style="margin: 5px 0 0 15px; padding: 0;">
                     <li>El sistema admite archivos en formato <strong>GIF, JPG o PNG</strong>.</li>
-                    <li>El tamaño máximo de la imagen es de 1MB <strong>(1024 KB)</strong>.</li>
+                    <li>El tamaño máximo de la imagen es de <strong>4 Megabytes</strong>.</li>
                     <li>La imagen no debe superar las dimensiones de <strong>600px de ancho por 600px de alto</strong>.</li>
                 </ul>
             </div>
@@ -56,12 +56,12 @@
             <?php echo form_input('cargo', set_value('cargo', $integrante["cargo"]), 'class="form-control" placeholder="Cargo que ocupa"'); ?>
         </div>
         <div class="form-group">
-            <?php echo form_label('Departamento:', 'departamento'); ?>
-            <?php echo form_input('departamento', set_value('departamento', $integrante["departamento"]), 'class="form-control" placeholder="Departamento al que pertenece (radio,cecom,etc)"'); ?>
+            <?php echo form_label('Correo:', 'correo'); ?>
+            <?php echo form_input('correo', set_value('correo',$integrante["correo"]),'class="form-control" placeholder="Correo Electrónico"'); ?>
         </div>
         <div class="form-group">
             <?php echo form_label('Foto:', 'foto'); ?>
-            <?php echo form_upload('foto', "", 'class="form-control"'); ?>
+            <?php echo form_upload('foto', '', 'class="form-control" accept="image/jpeg,image/jpg,image/png,image/gif" required="true"'); ?>
         </div>
         <!-- Mensaje de información estilizado -->
         <div class="alert alert-info" style="margin-top: 10px; padding: 10px; border-left: 4px solid #17a2b8; border-radius: 4px;">
@@ -69,7 +69,7 @@
             <strong>Requisitos para la imagen:</strong>
             <ul style="margin: 5px 0 0 15px; padding: 0;">
                 <li>El sistema admite archivos en formato <strong>GIF, JPG o PNG</strong>.</li>
-                <li>El tamaño máximo de la imagen es de 1MB <strong>(1024 KB)</strong>.</li>
+                <li>El tamaño máximo de la imagen es de <strong>4 Megabytes</strong>.</li>
                 <li>La imagen no debe superar las dimensiones de <strong>600px de ancho por 600px de alto</strong>.</li>
             </ul>
         </div>
@@ -86,7 +86,7 @@
 <script>
     $(document).ready(function () {
         const validFormats = ['image/jpeg', 'image/png', 'image/gif'];
-        const maxFileSize = 1024 * 1024; // 1MB
+        const maxFileSize = 4 * 1024 * 1024; // 4MB en bytes
         const maxWidth = 600;
         const maxHeight = 600;
         let isImageValid = false; // Bandera para validar dimensiones de imagen
@@ -112,7 +112,7 @@
     
                 // Validar tamaño del archivo
                 if (file.size > maxFileSize) {
-                    errorMessage.text('El tamaño del archivo no debe superar 1024 KB.');
+                    errorMessage.text('El tamaño del archivo no debe superar 4 Megabytes.');
                     errorMessage.removeClass('hidden');
                     fileInput.val('');
                     isImageValid = false;

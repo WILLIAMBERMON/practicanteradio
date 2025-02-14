@@ -23,6 +23,7 @@
                 </tr>
                 </thead>
                 <?php foreach ($contenidos as $contenido): ?>
+                    <?php if($contenido->nombre_contenido == 'Nosotros' || $contenido->nombre_contenido == 'Contactos'): ?>
                     <tr>
                         <td>
                             <?php echo $contenido->nombre_contenido; ?>
@@ -40,6 +41,7 @@
                             <?php echo form_close(); ?>
                         </td>
                     </tr>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </table>
         <?php else: ?>
@@ -52,10 +54,12 @@
                    style="margin-left:10px;">
                     <i class="fa fa-backward"></i> Regresar
                 </a>
+                <!--
                 <a class="btn btn-primary pull-right"
-                   href="<?php echo site_url('administracion/agregar_contenido'); ?>">
+                   href="<?php //echo site_url('administracion/agregar_contenido'); ?>">
                     <i class="fa fa-plus-circle"></i> Añadir Contenido
                 </a>
+                -->
             </div>
         <?php endif; ?>
 
