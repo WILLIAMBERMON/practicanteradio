@@ -59,7 +59,8 @@ if ((in_array($_SERVER['REMOTE_ADDR'], array('::1', '127.0.0.1','10.0.2.2')) && 
 }
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
 
-$agentew = $_SERVER['HTTP_USER_AGENT'];
+//$agentew = $_SERVER['HTTP_USER_AGENT'];
+$agentew = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Desconocido';
 $findme   = '; wv';
 $pos = strpos($agentew, $findme);
 
